@@ -385,7 +385,7 @@ td.num,td.r{white-space:nowrap}
         <ul class="actions small">
           <li>สายด่วน ปภ. <b class="num">1784</b> (24 ชม.) · LINE <b>@1784DDPM</b> <button class="btn" type="button" id="copy-1784" style="padding:2px 10px;font-size:.75rem">คัดลอก 1784</button></li>
           <li><a href="https://www.thaiwater.net/" target="_blank" rel="noopener">ThaiWater คลังข้อมูลน้ำแห่งชาติ</a></li>
-          <li><a href="https://flood.gistda.or.th/" target="_blank" rel="noopener">GISTDA แผนที่น้ำท่วมจากดาวเทียม</a></li>
+          <li><a href="https://disaster.gistda.or.th/flood" target="_blank" rel="noopener">GISTDA แผนที่น้ำท่วมจากดาวเทียม</a></li>
           <li><a href="https://www.onwr.go.th/" target="_blank" rel="noopener">สทนช. ประกาศสถานการณ์น้ำ</a></li>
           <li><a href="https://www.rid.go.th/" target="_blank" rel="noopener">กรมชลประทาน</a></li>
           <li><a href="https://www.disaster.go.th/" target="_blank" rel="noopener">กรมป้องกันและบรรเทาสาธารณภัย</a></li>
@@ -408,6 +408,13 @@ var OM_URL='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+
 var MR_URL='https://marine-api.open-meteo.com/v1/marine?latitude=13.40&longitude=100.55&hourly=sea_level_height_msl&past_days=1&forecast_days=7&timezone=Asia%2FBangkok';
 function twGraph(id,days){return TW+'waterlevel_graph?station_type=tele_waterlevel&station_id='+id+'&start_date='+bkkDate(-days)+'&end_date='+bkkDate(0);}
 function srcLink(url,label){return '<a class="src" href="'+esc(url)+'" target="_blank" rel="noopener" title="'+esc(label)+'" aria-label="'+esc(label)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a>';}
+var TW_WEB='https://www.thaiwater.net/water/wl', TW_RID='https://www.thaiwater.net/water/wl/rid';
+var OM_WEB='https://open-meteo.com/en/docs?latitude='+LAT+'&longitude='+LON+'&hourly=precipitation,precipitation_probability&daily=precipitation_sum,precipitation_probability_max&timezone=Asia%2FBangkok&past_days=3';
+var MR_WEB='https://open-meteo.com/en/docs/marine-weather-api?latitude=13.4&longitude=100.55&hourly=sea_level_height_msl&timezone=Asia%2FBangkok';
+var PROV={5:'นนทบุรี',749:'นครปฐม',24:'นนทบุรี',747:'นครปฐม',748:'นครปฐม',2676:'นครปฐม',2599:'กรุงเทพมหานคร',26:'นนทบุรี',4:'กรุงเทพมหานคร',39:'พระนครศรีอยุธยา',2744:'ชัยนาท',2795:'นครสวรรค์'};
+var RIDS=[2676,2599,2744,2795];
+function twWeb(id){return RIDS.indexOf(id)>=0?TW_RID:TW_WEB;}
+function twHint(id,name){return 'ดูที่ ThaiWater'+(RIDS.indexOf(id)>=0?' (สถานีกรมชลประทาน)':'')+': เลือกจังหวัด'+(PROV[id]||'')+' แล้วหาสถานี '+name;}
 var GO={mh:'water',tc:'water',no:'water',cp:'water',c13:'north',rain:'rain',tide:'rain'};
 var TABNAME={water:'ระดับน้ำคลอง/แม่น้ำ',north:'น้ำเหนือ & เขื่อน',rain:'ฝน & น้ำทะเลหนุน'};
 var LV=['ปกติ','เฝ้าระวัง','เสี่ยงสูง','วิกฤต'];
@@ -594,12 +601,12 @@ function render(){
   // factors
   $('factors').querySelector('tbody').innerHTML=R.F.map(function(f){var g=GO[f.k];return '<tr'+(g?' class="go" data-go="'+g+'" tabindex="0" role="link" title="ไปที่แท็บ '+esc(TABNAME[g])+'"':'')+'><td>'+esc(f.label)+(g?'&nbsp;<span class="go-ar">›</span>':'')+(f.note?'<div class="small muted">'+esc(f.note)+'</div>':'')+'</td><td class="r num">'+esc(f.disp)+'</td><td>'+chip(f.l)+'</td></tr>';}).join('')||'<tr><td colspan="3" class="empty">รอข้อมูล</td></tr>';
   renderKpis(R);renderNotices();renderFresh();renderStations();renderNorth(R);renderRainK(R);
-  var SRC={mh:[twGraph(5,3),'ข้อมูลต้นทาง: กราฟคลองมหาสวัสดิ์ (ThaiWater)'],st:[TW_LOAD,'ข้อมูลต้นทาง: ระดับน้ำทุกสถานี (ThaiWater)'],c13:[twGraph(2744,10),'ข้อมูลต้นทาง: C.13 (ThaiWater/กรมชลประทาน)'],om:[OM_URL,'ข้อมูลต้นทาง: Open-Meteo Forecast'],mr:[MR_URL,'ข้อมูลต้นทาง: Open-Meteo Marine'],dg:[TW_LOAD,'ข้อมูลต้นทาง: ระดับน้ำ (ThaiWater)']};
+  var SRC={mh:[TW_WEB,twHint(5,'คลองมหาสวัสดิ บางกรวย-สวนผัก')],st:[TW_WEB,'ดูที่ ThaiWater: หน้าระดับน้ำ เลือกจังหวัดของแต่ละสถานี'],c13:[TW_RID,twHint(2744,'ท้ายเขื่อนเจ้าพระยา (C.13)')],om:[OM_WEB,'ดูที่ Open-Meteo: พยากรณ์ฝน ณ พิกัดหมู่บ้าน'],mr:[MR_WEB,'ดูที่ Open-Meteo: ระดับน้ำทะเล (Marine API) ปากอ่าวไทย'],dg:[TW_WEB,twHint(5,'คลองมหาสวัสดิ บางกรวย-สวนผัก')]};
   document.querySelectorAll('.src-slot').forEach(function(el){var s=SRC[el.dataset.src];if(s)el.innerHTML=srcLink(s[0],s[1]);});
   renderCharts();
 }
 function kpi(o){var go=o.go?' go" data-go="'+o.go+'" role="link" tabindex="0" title="ไปที่แท็บ '+esc(TABNAME[o.go]||'')+'':'';
-  return '<div class="card kpi '+(o.l!=null?'k'+o.l:'')+go+'"><div class="row"><span class="lab">'+esc(o.lab)+(o.src?srcLink(o.src,'ข้อมูลต้นทาง: '+o.lab):'')+'</span>'+(o.noChip?'':chip(o.l))+'</div><div class="val">'+o.val+'<small>'+esc(o.unit||'')+'</small></div><div class="sub">'+o.sub+'</div>'+(o.spark||'')+(o.go?'<div class="more">ดูรายละเอียดในแท็บ '+esc(TABNAME[o.go])+' ›</div>':'')+'</div>';}
+  return '<div class="card kpi '+(o.l!=null?'k'+o.l:'')+go+'"><div class="row"><span class="lab">'+esc(o.lab)+(o.src?srcLink(o.src,o.srcLabel||('ดูที่แหล่งข้อมูล: '+o.lab)):'')+'</span>'+(o.noChip?'':chip(o.l))+'</div><div class="val">'+o.val+'<small>'+esc(o.unit||'')+'</small></div><div class="sub">'+o.sub+'</div>'+(o.spark||'')+(o.go?'<div class="more">ดูรายละเอียดในแท็บ '+esc(TABNAME[o.go])+' ›</div>':'')+'</div>';}
 function renderKpis(R){
   if(!S){$('kpis').innerHTML='<div class="card empty">กำลังโหลดข้อมูล… ถ้าค้างนาน ลองรีเฟรชหน้าอีกครั้ง</div>';return;}
   var F={};R.F.forEach(function(f){F[f.k]=f;});var s5=st(5),c13=st(2744),tc=st(748);
@@ -634,25 +641,25 @@ function renderStations(){
   if(!S||!S.stations){return;}
   var rows=ORDER.map(st).filter(Boolean).map(function(s){var p=s.pct;var l=lvlBy(p,[80,100,110]);var w=Math.max(0,Math.min(100,(p||0)/1.25));var col=l===3?'var(--crit)':l===2?'var(--navy)':l===1?'var(--blue)':'var(--sky)';
     var d=s.wl!=null&&s.prev!=null?s.wl-s.prev:null;var tr=d==null?'–':(Math.abs(d)<0.005?'คงที่':(d>0?'▲ ':'▼ ')+fmt(Math.abs(d)));
-    return '<tr><td><b>'+esc(s.name)+'</b>'+srcLink(twGraph(s.id,3),'ข้อมูลต้นทาง ThaiWater: '+s.name)+'<div class="small muted">'+esc(s.code)+' · '+esc(s.agency)+'</div></td><td class="small ink2">'+esc(ROLE[s.id]||'')+'</td><td class="r num"><b>'+fmt(s.wl)+'</b>'+(s.q!=null?'<div class="small muted">'+fmt(s.q,0)+' ลบ.ม./วิ</div>':'')+'</td><td class="r num muted">'+fmt(s.bank)+'</td><td><div style="display:flex;align-items:center;gap:8px"><div class="meter" title="'+fmt(p,0)+'% ของตลิ่ง"><b style="width:'+w+'%;background:'+col+'"></b><span class="bank" style="left:80%"></span></div><span class="num small">'+fmt(p,0)+'%</span></div></td><td class="r num small">'+tr+'</td><td class="small muted num">'+esc(s.t.slice(5))+'</td></tr>';});
+    return '<tr><td><b>'+esc(s.name)+'</b>'+srcLink(twWeb(s.id),twHint(s.id,s.name))+'<div class="small muted">'+esc(s.code)+' · '+esc(s.agency)+'</div></td><td class="small ink2">'+esc(ROLE[s.id]||'')+'</td><td class="r num"><b>'+fmt(s.wl)+'</b>'+(s.q!=null?'<div class="small muted">'+fmt(s.q,0)+' ลบ.ม./วิ</div>':'')+'</td><td class="r num muted">'+fmt(s.bank)+'</td><td><div style="display:flex;align-items:center;gap:8px"><div class="meter" title="'+fmt(p,0)+'% ของตลิ่ง"><b style="width:'+w+'%;background:'+col+'"></b><span class="bank" style="left:80%"></span></div><span class="num small">'+fmt(p,0)+'%</span></div></td><td class="r num small">'+tr+'</td><td class="small muted num">'+esc(s.t.slice(5))+'</td></tr>';});
   $('stations').querySelector('tbody').innerHTML=rows.join('');
   var s5=st(5);$('mh-time').textContent=s5?'วัดล่าสุด '+thTime(localMs(s5.t)):'';
 }
 function renderNorth(R){
   if(!S)return;var c2=st(2795),c13=st(2744),ay=st(39);
   $('north-kpis').innerHTML=[
-    kpi({src:twGraph(2795,10),lab:'นครสวรรค์ C.2 (อัตราการไหล)',l:c2?lvlBy(c2.q,[1500,2800,3500]):null,val:fmt(c2&&c2.q,0),unit:'ลบ.ม./วิ',sub:c2?'วัด '+esc(c2.t.slice(5)):'–'}),
-    kpi({src:twGraph(2744,10),lab:'ท้ายเขื่อนเจ้าพระยา C.13',l:lvlBy(R.cq,[1500,2800,3500]),val:fmt(R.cq,0),unit:'ลบ.ม./วิ',sub:c13?'ระดับน้ำ '+fmt(c13.wl)+' / ตลิ่ง '+fmt(c13.bank)+' ม.':'–'}),
-    kpi({src:twGraph(39,3),lab:'เจ้าพระยา อยุธยา',l:ay?lvlBy(ay.pct,[80,100,110]):null,val:fmt(ay&&ay.pct,0),unit:'% ตลิ่ง',sub:ay?fmt(ay.wl)+' / ตลิ่ง '+fmt(ay.bank)+' ม.':'–'})].join('');
+    kpi({src:TW_RID,srcLabel:twHint(2795,'ค่ายจิรประวัติ (C.2)'),lab:'นครสวรรค์ C.2 (อัตราการไหล)',l:c2?lvlBy(c2.q,[1500,2800,3500]):null,val:fmt(c2&&c2.q,0),unit:'ลบ.ม./วิ',sub:c2?'วัด '+esc(c2.t.slice(5)):'–'}),
+    kpi({src:TW_RID,srcLabel:twHint(2744,'ท้ายเขื่อนเจ้าพระยา (C.13)'),lab:'ท้ายเขื่อนเจ้าพระยา C.13',l:lvlBy(R.cq,[1500,2800,3500]),val:fmt(R.cq,0),unit:'ลบ.ม./วิ',sub:c13?'ระดับน้ำ '+fmt(c13.wl)+' / ตลิ่ง '+fmt(c13.bank)+' ม.':'–'}),
+    kpi({src:TW_WEB,srcLabel:twHint(39,'พระนครศรีอยุธยา'),lab:'เจ้าพระยา อยุธยา',l:ay?lvlBy(ay.pct,[80,100,110]):null,val:fmt(ay&&ay.pct,0),unit:'% ตลิ่ง',sub:ay?fmt(ay.wl)+' / ตลิ่ง '+fmt(ay.bank)+' ม.':'–'})].join('');
   $('c13-time').textContent=c13?'วัดล่าสุด '+thTime(localMs(c13.t)):'';
 }
 function renderRainK(R){
   if(!S||!S.rain)return;var rd=S.rain.daily;var t0=rd.t.indexOf(bkkDate(0));var mx=null;rd.t.forEach(function(d,i){if(d>=bkkDate(0)&&(mx==null||rd.p[i]>rd.p[mx]))mx=i;});
   var past=0;rd.t.forEach(function(d,i){if(d<bkkDate(0))past+=rd.p[i]||0;});
   $('rain-kpis').innerHTML=[
-    kpi({src:OM_URL,lab:'ฝนวันนี้ (พยากรณ์)',l:lvlBy(t0>=0?rd.p[t0]:null,[35,90,150]),val:fmt(t0>=0?rd.p[t0]:null,1),unit:'มม.',sub:'โอกาสฝน '+fmt(t0>=0?rd.pp[t0]:null,0)+'%'}),
-    kpi({src:OM_URL,lab:'ฝน 72 ชม. ข้างหน้า',l:lvlBy(R.r72,[35,90,150]),val:fmt(R.r72,1),unit:'มม.',sub:mx!=null?'วันที่ฝนมากสุด '+thTime(localMs(rd.t[mx]+'T12:00'),{weekday:'short',day:'numeric',month:'short'})+' · '+fmt(rd.p[mx],1)+' มม.':''}),
-    kpi({src:OM_URL,lab:'ฝนสะสม 3 วันที่ผ่านมา',l:null,noChip:true,val:fmt(past,1),unit:'มม.',sub:'จากแบบจำลอง Open-Meteo'})].join('');
+    kpi({src:OM_WEB,lab:'ฝนวันนี้ (พยากรณ์)',l:lvlBy(t0>=0?rd.p[t0]:null,[35,90,150]),val:fmt(t0>=0?rd.p[t0]:null,1),unit:'มม.',sub:'โอกาสฝน '+fmt(t0>=0?rd.pp[t0]:null,0)+'%'}),
+    kpi({src:OM_WEB,lab:'ฝน 72 ชม. ข้างหน้า',l:lvlBy(R.r72,[35,90,150]),val:fmt(R.r72,1),unit:'มม.',sub:mx!=null?'วันที่ฝนมากสุด '+thTime(localMs(rd.t[mx]+'T12:00'),{weekday:'short',day:'numeric',month:'short'})+' · '+fmt(rd.p[mx],1)+' มม.':''}),
+    kpi({src:OM_WEB,lab:'ฝนสะสม 3 วันที่ผ่านมา',l:null,noChip:true,val:fmt(past,1),unit:'มม.',sub:'จากแบบจำลอง Open-Meteo'})].join('');
   var a=srcAt('meteo');$('rain-time').textContent=a?'ดึงเมื่อ '+thTime(a):'';var b=srcAt('marine');$('tide-time').textContent=b?'ดึงเมื่อ '+thTime(b):'';
 }
 function renderDiagram(R){
