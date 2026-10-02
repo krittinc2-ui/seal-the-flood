@@ -1,0 +1,745 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<title>Seal the Flood · เฝ้าน้ำท่วม</title>
+<meta name="description" content="แดชบอร์ดเฝ้าระวังน้ำท่วม หมู่บ้าน Villaggio ปิ่นเกล้า-ศาลายา อัปเดตทุกชั่วโมง">
+<meta property="og:title" content="Seal the Flood · เฝ้าน้ำท่วม">
+<meta property="og:description" content="ระดับน้ำคลองมหาสวัสดิ์ ท่าจีน เจ้าพระยา ฝน และน้ำทะเลหนุน อัปเดตทุกชั่วโมง">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+</head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: sticky header (mascot + live status) → tab strip → one panel per tab; At-a-Glance leads with the risk verdict, then KPI tiles, then factor table. */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#EAF3FB; --line:#D3E2F1;
+  --ink:#0B1D36; --ink-2:#3D5676; --muted:#6A82A1;
+  --navy:#123766; --blue:#2F6FB7; --sky:#8DBDE9; --mist:#DCEBF8;
+  --crit:#C62828; --crit-bg:#FDECEC;
+  --lv0-bg:#E4F0FB; --lv0-fg:#24527F; --lv1-bg:#B9D7F3; --lv1-fg:#0F3A66;
+  --lv2-bg:#123766; --lv2-fg:#FFFFFF; --lv3-bg:#C62828; --lv3-fg:#FFFFFF;
+  --seal-body:#FFFFFF; --seal-belly:#DCEAF6; --seal-ink:#0E1A2B; --seal-bg:#A9C8EA;
+  --shadow:0 1px 2px rgba(18,55,102,.06),0 4px 16px rgba(18,55,102,.06);
+  --f-display:"Fredoka","Mali","IBM Plex Sans Thai",system-ui,sans-serif;
+  --f-brand:"Fredoka","Mali",ui-rounded,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+:root{color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.6}
+h2{font-size:1.15rem;font-weight:700;color:var(--navy)}
+h3{font-size:.98rem;font-weight:600}
+a{color:var(--blue)}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .ink2{color:var(--ink-2)}
+.small{font-size:.82rem}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 280px}
+.brand svg{width:56px;height:56px;flex:none}
+.brand .app{font-family:var(--f-brand);font-weight:600;font-size:1.55rem;line-height:1.1;color:var(--navy);letter-spacing:.01em;margin:0}
+.brand .app span{color:var(--blue)}
+.brand h1{font-size:1rem;font-weight:600;color:var(--ink);line-height:1.55;margin-top:2px}
+.brand p{margin:0;font-size:.8rem;color:var(--muted)}
+.sync{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sync-text{font-size:.8rem;color:var(--ink-2);text-align:right}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--navy);padding:7px 14px;border-radius:999px;font-weight:600;font-size:.86rem;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--surface-2)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.btn svg{width:16px;height:16px}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* tabs */
+.tabs{display:flex;gap:4px;overflow-x:auto;padding-block:8px;scrollbar-width:thin}
+.tab{border:0;background:transparent;color:var(--ink-2);padding:8px 14px;border-radius:10px;font-weight:600;font-size:.9rem;white-space:nowrap;font-family:var(--f-body)}
+.tab:hover{background:var(--surface-2)}
+.tab[aria-selected="true"]{background:var(--navy);color:var(--bg)}
+main{padding-block:18px 48px}
+.panel{display:grid;gap:18px}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+
+/* verdict */
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;border-radius:18px;padding:20px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.verdict .seal-big{width:150px;height:150px}
+.verdict .lvl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.verdict h2.head{font-size:1.5rem;color:var(--ink);font-weight:700}
+.verdict p.sum{margin:.4rem 0 0;color:var(--ink-2);max-width:68ch}
+.scale{display:flex;gap:4px;margin-top:14px;max-width:460px}
+.scale span{flex:1;font-size:.72rem;text-align:center;padding:4px 2px;border-radius:6px;background:var(--surface-2);color:var(--muted);font-weight:600}
+.scale span.on{outline:2px solid var(--ink);outline-offset:1px}
+.scale .s0.on{background:var(--lv0-bg);color:var(--lv0-fg)}
+.scale .s1.on{background:var(--lv1-bg);color:var(--lv1-fg)}
+.scale .s2.on{background:var(--lv2-bg);color:var(--lv2-fg)}
+.scale .s3.on{background:var(--lv3-bg);color:var(--lv3-fg)}
+.verdict.v3{border-color:var(--crit);box-shadow:0 0 0 3px var(--crit-bg)}
+@media (max-width:620px){.verdict{grid-template-columns:1fr;text-align:left}.verdict .seal-big{width:110px;height:110px}}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:600;white-space:nowrap;line-height:1.5}
+.chip i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.l0{background:var(--lv0-bg);color:var(--lv0-fg)}
+.l1{background:var(--lv1-bg);color:var(--lv1-fg)}
+.l2{background:var(--lv2-bg);color:var(--lv2-fg)}
+.l3{background:var(--lv3-bg);color:var(--lv3-fg)}
+.lna{background:var(--surface-2);color:var(--muted)}
+.chip.big{font-size:.95rem;padding:5px 14px}
+
+/* KPI tiles */
+.kpi{display:flex;flex-direction:column;gap:6px;position:relative}
+.kpi .lab{font-size:.84rem;color:var(--ink-2);font-weight:500}
+.kpi .val{font-family:var(--f-data);font-size:1.75rem;font-weight:600;line-height:1.15;color:var(--ink)}
+.kpi .val small{font-size:.8rem;color:var(--muted);font-weight:500;margin-left:4px}
+.kpi .sub{font-size:.8rem;color:var(--muted)}
+.kpi .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.src{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;margin-left:6px;width:22px;height:22px;border-radius:6px;color:var(--muted)}
+.src svg{width:14px;height:14px}
+.src:hover{color:var(--blue);background:var(--surface-2)}
+.go{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.card.go:hover{border-color:var(--blue);box-shadow:var(--shadow)}
+tr.go:hover td{background:var(--surface-2)}
+.go-ar{color:var(--blue);font-weight:700}
+.more{font-size:.76rem;color:var(--blue);font-weight:600;margin-top:2px}
+.kpi.k2{border-left:4px solid var(--lv2-bg)}
+.kpi.k3{border-left:4px solid var(--crit);background:linear-gradient(0deg,var(--crit-bg),var(--crit-bg)) padding-box}
+.kpi.k1{border-left:4px solid var(--lv1-bg)}
+.kpi.k0{border-left:4px solid var(--lv0-bg)}
+.kpi svg.spark{width:100%;height:36px;display:block}
+
+/* tables */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:.76rem;letter-spacing:.02em;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+#stations{min-width:760px}
+.crit-tbl{min-width:680px}
+.crit-tbl th .chip{white-space:nowrap}
+
+/* meter */
+.meter{position:relative;height:10px;border-radius:5px;background:var(--mist);min-width:110px;overflow:hidden}
+.meter b{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.meter .bank{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.55}
+
+/* actions */
+.actions{margin:0;padding-left:1.2rem;display:grid;gap:4px}
+.callout{border-radius:12px;padding:12px 14px;background:var(--surface-2);font-size:.88rem;color:var(--ink-2)}
+.callout.crit{background:var(--crit-bg);color:var(--ink)}
+.notice{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.notice:last-child{border-bottom:0}
+
+/* charts */
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;overflow:visible}
+.chart .ax{fill:var(--muted);font-family:var(--f-data);font-size:10.5px}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .thr{stroke-width:1.2}
+.chart .thrl{font-family:var(--f-body);font-size:11px;font-weight:600;paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+.chart .ax{paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:var(--ink-2);margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px solid}
+.legend i.box{height:10px;width:10px;border:0;border-radius:2px}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:8px;padding:6px 9px;font-size:.78rem;white-space:nowrap;z-index:5;transform:translate(-50%,-110%)}
+.tip b{font-family:var(--f-data);font-size:.92rem;color:var(--ink)}
+
+/* freshness */
+.fresh{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;font-size:.84rem}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.ok{background:var(--blue)} .dot.stale{background:var(--sky)} .dot.err{background:var(--crit)}
+
+/* site diagram */
+.diagram svg{width:100%;height:auto;display:block}
+.timeline{display:grid;gap:0}
+.tl{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tl:last-child{border-bottom:0}
+.tl .y{font-family:var(--f-display);font-weight:700;color:var(--navy);font-size:1.05rem}
+
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:.9rem}
+footer{border-top:1px solid var(--line);padding-block:16px;color:var(--muted);font-size:.78rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+td.num,td.r{white-space:nowrap}
+.go-ar{white-space:nowrap}
+@media (max-width:560px){
+  td,th{padding:8px 6px}
+  table{font-size:.84rem}
+  .fresh{grid-template-columns:auto 1fr}
+  .fresh>div:nth-child(3n){grid-column:2;text-align:left!important;margin-bottom:6px}
+  .sync{width:100%;justify-content:space-between}
+  .sync-text{text-align:left}
+  .verdict h2.head{font-size:1.3rem}
+}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <svg id="seal-mini" viewBox="0 0 120 120" aria-hidden="true"></svg>
+      <div style="min-width:0">
+        <div class="app">Seal <span>the</span> Flood</div>
+        <h1>เฝ้าน้ำท่วม · Villaggio ปิ่นเกล้า-ศาลายา</h1>
+        <p>ต.ศาลากลาง อ.บางกรวย จ.นนทบุรี · 13.812°N 100.341°E</p>
+      </div>
+    </div>
+    <div class="sync">
+      <div class="sync-text" id="sync-text" aria-live="polite">กำลังโหลดข้อมูลล่าสุด…</div>
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="tabs" role="tablist" aria-label="หมวดข้อมูล">
+      <button class="tab" role="tab" id="t-glance" aria-controls="p-glance" aria-selected="true">At-a-Glance</button>
+      <button class="tab" role="tab" id="t-water" aria-controls="p-water" aria-selected="false">ระดับน้ำคลอง/แม่น้ำ</button>
+      <button class="tab" role="tab" id="t-north" aria-controls="p-north" aria-selected="false">น้ำเหนือ & เขื่อน</button>
+      <button class="tab" role="tab" id="t-rain" aria-controls="p-rain" aria-selected="false">ฝน & น้ำทะเลหนุน</button>
+      <button class="tab" role="tab" id="t-site" aria-controls="p-site" aria-selected="false">พื้นที่ & ประวัติ</button>
+      <button class="tab" role="tab" id="t-src" aria-controls="p-src" aria-selected="false">แหล่งข้อมูล & เกณฑ์</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- AT A GLANCE -->
+  <section class="panel" id="p-glance" role="tabpanel" aria-labelledby="t-glance">
+    <div class="verdict" id="verdict">
+      <svg class="seal-big" id="seal-big" viewBox="0 0 120 120" role="img" aria-label="น้องแมวน้ำ"></svg>
+      <div style="min-width:0">
+        <div class="lvl-row"><span class="muted small">ระดับความเสี่ยงน้ำท่วมของพื้นที่หมู่บ้าน</span><span id="v-chip" class="chip big lna"><i></i>รอข้อมูล</span></div>
+        <h2 class="head" id="v-head">กำลังประเมิน…</h2>
+        <p class="sum" id="v-sum">ระบบจะสรุปจากระดับน้ำคลองมหาสวัสดิ์ แม่น้ำท่าจีน การระบายน้ำเขื่อนเจ้าพระยา ฝนพยากรณ์ น้ำทะเลหนุน และประกาศทางการ</p>
+        <div class="scale" id="v-scale"><span class="s0">ปกติ</span><span class="s1">เฝ้าระวัง</span><span class="s2">เสี่ยงสูง</span><span class="s3">วิกฤต</span></div>
+      </div>
+    </div>
+
+    <div class="grid g3" id="kpis"></div>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-h"><h2>ปัจจัยที่ใช้ประเมิน</h2><span class="small muted">เกณฑ์ละเอียดอยู่ในแท็บ “แหล่งข้อมูล & เกณฑ์”</span></div>
+        <div class="tbl-wrap"><table id="factors"><thead><tr><th>ปัจจัย</th><th class="r">ค่าล่าสุด</th><th>ระดับ</th></tr></thead><tbody></tbody></table></div>
+      </div>
+      <div class="grid" style="align-content:start">
+        <div class="card">
+          <div class="card-h"><h2>ควรทำอะไรตอนนี้</h2><span class="chip lna" id="act-chip"><i></i>–</span></div>
+          <ul class="actions" id="actions"><li class="muted">รอผลประเมิน</li></ul>
+        </div>
+        <div class="card">
+          <div class="card-h"><h2>ประกาศทางการล่าสุด</h2></div>
+          <div id="notices"><div class="empty">ยังไม่มีประกาศที่บันทึกไว้</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h2>ความสดของข้อมูล</h2><span class="small muted" id="fresh-note"></span></div>
+      <div class="fresh" id="fresh"></div>
+    </div>
+  </section>
+
+  <!-- WATER LEVELS -->
+  <section class="panel" id="p-water" role="tabpanel" aria-labelledby="t-water" hidden>
+    <div class="card">
+      <div class="card-h"><div><h2>คลองมหาสวัสดิ์ (สถานีบางกรวย-สวนผัก) · 72 ชั่วโมง<span class="src-slot" data-src="mh"></span></h2><div class="small muted">ระดับน้ำ ม.รทก. ขึ้นลงตามน้ำทะเลหนุนวันละ 2 รอบ เส้นแนวนอนคือตลิ่งและเกณฑ์เฝ้าระวัง</div></div><span class="small muted" id="mh-time"></span></div>
+      <div class="chart" id="ch-mh"></div>
+      <div class="legend"><span><i style="border-color:var(--navy)"></i>ระดับน้ำ</span><span><i style="border-color:var(--crit)"></i>ตลิ่ง +2.07</span><span><i style="border-color:var(--blue)"></i>เกณฑ์เฝ้าระวัง +1.70</span></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h2>สถานีวัดระดับน้ำรอบหมู่บ้าน<span class="src-slot" data-src="st"></span></h2><span class="small muted">% เทียบตลิ่ง: เกิน 100% คือน้ำล้นตลิ่ง ณ จุดวัด</span></div>
+      <div class="tbl-wrap"><table id="stations"><thead><tr><th>สถานี</th><th>บทบาทต่อหมู่บ้าน</th><th class="r">ระดับน้ำ (ม.รทก.)</th><th class="r">ตลิ่ง</th><th>เทียบตลิ่ง</th><th class="r">แนวโน้ม</th><th>เวลาวัด</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- NORTH -->
+  <section class="panel" id="p-north" role="tabpanel" aria-labelledby="t-north" hidden>
+    <div class="grid g3" id="north-kpis"></div>
+    <div class="card">
+      <div class="card-h"><div><h2>ปริมาณน้ำไหลผ่านท้ายเขื่อนเจ้าพระยา (C.13) · 10 วัน<span class="src-slot" data-src="c13"></span></h2><div class="small muted">ลบ.ม./วินาที · สทนช. ตั้งเป้าคุมน้ำผ่าน กทม.–นนทบุรี ไม่เกิน 3,000 ลบ.ม./วินาที (1 ต.ค. 69)</div></div><span class="small muted" id="c13-time"></span></div>
+      <div class="chart" id="ch-c13"></div>
+      <div class="legend"><span><i style="border-color:var(--navy)"></i>อัตราการไหล</span><span><i style="border-color:var(--blue)"></i>2,800 เสี่ยงสูง</span><span><i style="border-color:var(--crit)"></i>3,500 วิกฤต</span></div>
+    </div>
+    <div class="card callout">
+      น้ำจากนครสวรรค์ (C.2) ใช้เวลาราว 1 วันถึงเขื่อนเจ้าพระยา และอีกราว 1–2 วันถึงอยุธยา (ข้อมูล สทนช. 1 ต.ค. 69) ก่อนลงสู่ปทุมธานี นนทบุรี และ กทม. ถ้าตัวเลขที่ C.2 และ C.13 สูงขึ้นติดต่อกันหลายวัน คลองฝั่งตะวันตกอย่างคลองมหาสวัสดิ์จะระบายลงเจ้าพระยาได้ช้าลง
+    </div>
+  </section>
+
+  <!-- RAIN & TIDE -->
+  <section class="panel" id="p-rain" role="tabpanel" aria-labelledby="t-rain" hidden>
+    <div class="grid g3" id="rain-kpis"></div>
+    <div class="card">
+      <div class="card-h"><div><h2>ฝนรายวันที่หมู่บ้าน<span class="src-slot" data-src="om"></span></h2><div class="small muted">มม./วัน · 3 วันที่ผ่านมา (สีอ่อน) และพยากรณ์ 7 วัน (สีเข้ม) · เส้นฝนหนัก 35 มม. ตามเกณฑ์กรมอุตุนิยมวิทยา</div></div><span class="small muted" id="rain-time"></span></div>
+      <div class="chart" id="ch-rain-d"></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><div><h2>ฝนรายชั่วโมง 48 ชั่วโมงข้างหน้า<span class="src-slot" data-src="om"></span></h2><div class="small muted">มม./ชม. · วางเมาส์เพื่อดูโอกาสฝน</div></div></div>
+      <div class="chart" id="ch-rain-h"></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><div><h2>น้ำทะเลหนุนบริเวณปากอ่าว (แบบจำลอง) · 7 วัน<span class="src-slot" data-src="mr"></span></h2><div class="small muted">เมตร เทียบระดับทะเลเฉลี่ยของแบบจำลอง · ใช้ดูจังหวะน้ำขึ้นสูงเพื่อวางแผน ไม่ใช่ค่าระดับ ม.รทก.</div></div><span class="small muted" id="tide-time"></span></div>
+      <div class="chart" id="ch-tide"></div>
+      <div class="small ink2" id="tide-peaks" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- SITE & HISTORY -->
+  <section class="panel" id="p-site" role="tabpanel" aria-labelledby="t-site" hidden>
+    <div class="grid g2">
+      <div class="card diagram">
+        <div class="card-h"><h2>ระดับพื้นดินเทียบระดับน้ำ (ม.รทก.)<span class="src-slot" data-src="dg"></span></h2></div>
+        <div id="levels-diagram"></div>
+        <p class="small muted" style="margin:.5rem 0 0">พื้นดินเดิมประเมินจาก SRTM 30 ม. (ปี 2543 ก่อนสร้างโครงการ) ระดับตลิ่งสถานีโทรมาตร สสน. และแผนที่กรมแผนที่ทหาร ระดับพื้นถนนและพื้นบ้านจริงหลังถมดิน ควรขอค่า ม.รทก. จากนิติบุคคลหรือ Land & Houses</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><h2>ข้อมูลพื้นที่</h2></div>
+        <div class="tbl-wrap"><table>
+          <tbody>
+            <tr><td class="ink2">โครงการ</td><td>Villaggio ปิ่นเกล้า-ศาลายา (Land & Houses, 944 หลัง, เสร็จ ~2563)<a class="src" href="https://zmyhome.com/project/H1641" target="_blank" rel="noopener" title="แหล่งข้อมูลโครงการ" aria-label="แหล่งข้อมูลโครงการ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></td></tr>
+            <tr><td class="ink2">ที่ตั้ง</td><td>ต.ศาลากลาง อ.บางกรวย จ.นนทบุรี · ห่าง ม.มหิดล ศาลายา ~3 กม.</td></tr>
+            <tr><td class="ink2">พื้นดินเดิม (ประเมิน)</td><td class="num">+1.0 ถึง +2.0 ม.รทก.</td></tr>
+            <tr><td class="ink2">SRTM 30 ม. ในหมู่บ้าน</td><td class="num">2–5 ม. (±3–5 ม.)<a class="src" href="https://www.opentopodata.org/datasets/srtm/" target="_blank" rel="noopener" title="แหล่งข้อมูล SRTM 30 ม." aria-label="แหล่งข้อมูล SRTM 30 ม."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></td></tr>
+            <tr><td class="ink2">ตลิ่งคลองมหาสวัสดิ์ (บางกรวย)</td><td class="num">+2.07 / +2.15 ม.รทก.<span class="src-slot" data-src="dg"></span></td></tr>
+            <tr><td class="ink2">ตลิ่งศาลาดิน</td><td class="num">+2.37 / +2.31 ม.รทก.</td></tr>
+            <tr><td class="ink2">พื้นที่ข้างเคียง (กรมแผนที่ทหาร)</td><td>ทวีวัฒนา +1–2 ม. · บางแค/ภาษีเจริญ +0.5–1 ม.<a class="src" href="https://hilight.kapook.com/view/64193" target="_blank" rel="noopener" title="แหล่งข้อมูล: แผนที่ความสูงกรมแผนที่ทหาร" aria-label="แหล่งข้อมูล: แผนที่ความสูงกรมแผนที่ทหาร"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></td></tr>
+            <tr><td class="ink2">เส้นทางน้ำหลักปี 2554</td><td>บางใหญ่ → คลองมหาสวัสดิ์ → ศาลายา</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-h"><h2>ประวัติน้ำท่วมใกล้หมู่บ้าน</h2></div>
+        <div class="timeline">
+          <div class="tl"><div class="y">2554</div><div><b>มหาอุทกภัย</b> · 27 ต.ค. คันกั้นน้ำศาลายาพัง น้ำสูงเกิน 30 ซม. น้ำมาจากบางใหญ่ทางคลองมหาสวัสดิ์ · แยกพุทธมณฑล–ศาลายา 30–60 ซม. ปิดถนนบรมราชชนนี · ต.ไทยาวาส 40–70 ซม. นานกว่า 2 เดือน · บางใหญ่ 1.5 ม. ราว 4 สัปดาห์ · ถ.บางกรวย-ไทรน้อย น้ำระดับเอว<a class="src" href="https://mgronline.com/uptodate/detail/9540000137053" target="_blank" rel="noopener" title="แหล่งข่าว: MGR ศาลายา 2554" aria-label="แหล่งข่าว: MGR ศาลายา 2554"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a><a class="src" href="https://www.komchadluek.net/news/113282" target="_blank" rel="noopener" title="แหล่งข่าว: คมชัดลึก บรมราชชนนี 2554" aria-label="แหล่งข่าว: คมชัดลึก บรมราชชนนี 2554"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a><a class="src" href="https://mgronline.com/onlinesection/detail/9540000135703" target="_blank" rel="noopener" title="แหล่งข่าว: MGR บางกรวย-ไทรน้อย 2554" aria-label="แหล่งข่าว: MGR บางกรวย-ไทรน้อย 2554"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></div></div>
+          <div class="tl"><div class="y">2565</div><div><b>พายุโนรู</b> · ประกาศภัย 6 ตำบลในบางใหญ่ · ชุมชนริมคลอง ต.วัดชลอ บางกรวย ท่วม 30–70 ซม. เกือบ 1 เดือน<a class="src" href="https://thestandard.co/nonthaburi-floods/" target="_blank" rel="noopener" title="แหล่งข่าว: The Standard บางใหญ่ 2565" aria-label="แหล่งข่าว: The Standard บางใหญ่ 2565"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a><a class="src" href="https://www.naewna.com/local/686161" target="_blank" rel="noopener" title="แหล่งข่าว: แนวหน้า บางกรวย 2565" aria-label="แหล่งข่าว: แนวหน้า บางกรวย 2565"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></div></div>
+          <div class="tl"><div class="y">2569</div><div><b>เหตุการณ์ปัจจุบัน</b> · 29 ก.ย. นนทบุรีประกาศบางกรวยเป็นพื้นที่ประสบอุทกภัย 7 อปท. รวม ทม.ศาลากลาง และ อบต.มหาสวัสดิ์ · ปภ. เตือนเจ้าพระยาขึ้นอีก 20–40 ซม. ช่วง 29 ก.ย.–4 ต.ค.<a class="src" href="https://www.ejan.co/news/4ru2vhlx9cf9" target="_blank" rel="noopener" title="แหล่งข่าว: ประกาศพื้นที่ประสบภัยบางกรวย" aria-label="แหล่งข่าว: ประกาศพื้นที่ประสบภัยบางกรวย"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a><a class="src" href="https://www.amarintv.com/news/social/558953" target="_blank" rel="noopener" title="แหล่งข่าว: ปภ. เตือน" aria-label="แหล่งข่าว: ปภ. เตือน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><div><h2>บันทึกรายวันของแดชบอร์ด</h2><div class="small muted">ระดับสูงสุดของคลองมหาสวัสดิ์ในแต่ละวัน จากการบันทึกทุกชั่วโมง</div></div></div>
+        <div class="chart" id="ch-hist"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="panel" id="p-src" role="tabpanel" aria-labelledby="t-src" hidden>
+    <div class="card">
+      <div class="card-h"><h2>แหล่งข้อมูลและรอบการอัปเดต</h2></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>ข้อมูล</th><th>แหล่ง</th><th>รอบอัปเดตต้นทาง</th><th>ใช้ในแดชบอร์ด</th></tr></thead>
+        <tbody>
+          <tr><td>ระดับน้ำสถานีโทรมาตร</td><td><a href="https://www.thaiwater.net/water/wl" target="_blank" rel="noopener">ThaiWater · สสน. (HII)</a></td><td>ทุก 10 นาที</td><td>ระดับน้ำ ตลิ่ง % เทียบตลิ่ง</td></tr>
+          <tr><td>ระดับน้ำ/อัตราการไหลสถานีหลัก</td><td><a href="https://www.thaiwater.net/" target="_blank" rel="noopener">กรมชลประทาน (ผ่าน ThaiWater)</a></td><td>รายชั่วโมง</td><td>C.2 นครสวรรค์, C.13 ท้ายเขื่อนเจ้าพระยา</td></tr>
+          <tr><td>ฝนพยากรณ์และฝนที่ผ่านมา</td><td><a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo Forecast API</a></td><td>แบบจำลองอัปเดตทุก 1–6 ชม.</td><td>ฝนรายวัน/รายชั่วโมงที่พิกัดหมู่บ้าน</td></tr>
+          <tr><td>น้ำทะเลหนุน (แบบจำลอง)</td><td><a href="https://open-meteo.com/en/docs/marine-weather-api" target="_blank" rel="noopener">Open-Meteo Marine API</a></td><td>รายวัน</td><td>จังหวะน้ำขึ้นสูงบริเวณปากอ่าว</td></tr>
+          <tr><td>ประกาศทางการ</td><td>ปภ., จังหวัดนนทบุรี, สทนช. (คัดจากข่าวและประกาศ)</td><td>เมื่อมีประกาศใหม่</td><td>ปัจจัยประกาศภัย</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small ink2" style="margin:.8rem 0 0">การอัปเดต: ระบบอัตโนมัติดึงระดับน้ำจาก ThaiWater และบันทึกชุดข้อมูลทุก 1 ชั่วโมง ส่วนฝนและน้ำทะเลหนุนจาก Open-Meteo หน้านี้ดึงสดทุกครั้งที่เปิด ดูเวลาที่ดึงข้อมูลแต่ละแหล่งได้ที่การ์ด “ความสดของข้อมูล” ในหน้าแรก</p>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h2>เกณฑ์ประเมินความเสี่ยง</h2><span class="small muted">เกณฑ์ชั่วคราว ปรับได้เมื่อได้ระดับพื้นถนนจริงของหมู่บ้าน</span></div>
+      <div class="tbl-wrap"><table class="crit-tbl">
+        <thead><tr><th>ปัจจัย</th><th><span class="chip l0">ปกติ</span></th><th><span class="chip l1">เฝ้าระวัง</span></th><th><span class="chip l2">เสี่ยงสูง</span></th><th><span class="chip l3">วิกฤต</span></th></tr></thead>
+        <tbody>
+          <tr><td>คลองมหาสวัสดิ์ สูงสุด 24 ชม. (ม.รทก.)</td><td class="num">&lt; 1.70</td><td class="num">1.70–2.06</td><td class="num">2.07–2.29 (ล้นตลิ่ง ณ จุดวัด)</td><td class="num">≥ 2.30</td></tr>
+          <tr><td>แม่น้ำท่าจีน นครชัยศรี (% ตลิ่ง)</td><td class="num">&lt; 80</td><td class="num">80–99</td><td class="num">100–109</td><td class="num">≥ 110</td></tr>
+          <tr><td>คลองทางเหนือ ไทรน้อย/บางเลน (% ตลิ่ง)</td><td class="num">&lt; 80</td><td class="num">80–99</td><td class="num">100–109</td><td class="num">≥ 110</td></tr>
+          <tr><td>เจ้าพระยา สามเสน (% ตลิ่ง)</td><td class="num">&lt; 80</td><td class="num">80–99</td><td class="num">100–109</td><td class="num">≥ 110</td></tr>
+          <tr><td>ท้ายเขื่อนเจ้าพระยา C.13 (ลบ.ม./วิ)</td><td class="num">&lt; 1,500</td><td class="num">1,500–2,799</td><td class="num">2,800–3,499</td><td class="num">≥ 3,500</td></tr>
+          <tr><td>ฝนพยากรณ์ 72 ชม. (มม.)</td><td class="num">&lt; 35</td><td class="num">35–89</td><td class="num">90–149</td><td class="num">≥ 150</td></tr>
+          <tr><td>น้ำทะเลหนุนสูงสุด 72 ชม. (แบบจำลอง, ม.)</td><td class="num">&lt; 1.60</td><td class="num">1.60–1.89</td><td class="num">≥ 1.90</td><td class="num">–</td></tr>
+          <tr><td>ประกาศทางการครอบคลุม ต.ศาลากลาง</td><td>ไม่มี</td><td>ประกาศพื้นที่ประสบภัย</td><td>เตือนให้ยกของ/ย้ายรถในพื้นที่</td><td>สั่งอพยพ</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout" style="margin-top:12px">ภาพรวม: มีปัจจัยใดเป็น <b>วิกฤต</b> → วิกฤต · คลองมหาสวัสดิ์อยู่ระดับเสี่ยงสูง หรือมีปัจจัยเสี่ยงสูงตั้งแต่ 2 ข้อ → <b>เสี่ยงสูง</b> · มีปัจจัยใดเฝ้าระวังขึ้นไป → <b>เฝ้าระวัง</b> · นอกนั้น → ปกติ</div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-h"><h2>แนวคิดการออกแบบจาก dashboard ทั่วโลก</h2></div>
+        <ul class="actions small ink2">
+          <li><b>US NWS / NWPS:</b> แบ่งระดับน้ำเป็นขั้น Action–Minor–Moderate–Major ใช้สีเดียวกันทุกหน้า และแยกเส้นข้อมูลวัดจริงกับพยากรณ์</li>
+          <li><b>UK Environment Agency “Check for flooding”:</b> แสดงค่าล่าสุดพร้อมเวลา แนวโน้ม ช่วงปกติ และระดับสูงสุดในอดีตเป็นจุดอ้างอิง</li>
+          <li><b>Impact-based warning (งานทบทวนระบบเตือนภัยน้ำท่วม 2025):</b> บอกผลกระทบและสิ่งที่ควรทำ ไม่ใช่แค่ตัวเลข และต้องบอกความสดของข้อมูลเพื่อความน่าเชื่อถือ</li>
+          <li><b>ThaiWater (สสน.):</b> ใช้ % เทียบตลิ่งเป็นภาษากลางของระดับน้ำในไทย</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-h"><h2>ช่องทางฉุกเฉินและติดตาม</h2></div>
+        <ul class="actions small">
+          <li>สายด่วน ปภ. <b class="num">1784</b> (24 ชม.) · LINE <b>@1784DDPM</b> <button class="btn" type="button" id="copy-1784" style="padding:2px 10px;font-size:.75rem">คัดลอก 1784</button></li>
+          <li><a href="https://www.thaiwater.net/" target="_blank" rel="noopener">ThaiWater คลังข้อมูลน้ำแห่งชาติ</a></li>
+          <li><a href="https://flood.gistda.or.th/" target="_blank" rel="noopener">GISTDA แผนที่น้ำท่วมจากดาวเทียม</a></li>
+          <li><a href="https://www.onwr.go.th/" target="_blank" rel="noopener">สทนช. ประกาศสถานการณ์น้ำ</a></li>
+          <li><a href="https://www.rid.go.th/" target="_blank" rel="noopener">กรมชลประทาน</a></li>
+          <li><a href="https://www.disaster.go.th/" target="_blank" rel="noopener">กรมป้องกันและบรรเทาสาธารณภัย</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">ข้อมูลเพื่อการเฝ้าระวังเบื้องต้น ไม่ใช่ประกาศทางการ · ตัดสินใจอพยพตามคำสั่งของหน่วยงานท้องถิ่นและนิติบุคคลหมู่บ้าน · ข้อมูลระดับน้ำ: <a href="https://www.thaiwater.net/" target="_blank" rel="noopener">คลังข้อมูลน้ำแห่งชาติ (สสน.)</a> และกรมชลประทาน · ข้อมูลฝนและน้ำทะเล: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> (<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>) · เว็บส่วนตัว ไม่แสวงหากำไร ไม่เก็บข้อมูลผู้เข้าชม</div></footer>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var HOST='host:claude_browser';
+var TW='https://api-v3.thaiwater.net/api/v1/thaiwater30/public/';
+var LAT=13.8119, LON=100.3412;
+var TW_LOAD=TW+'waterlevel_load?province_code=10,12,73,14,18,60';
+var OM_URL='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+'&hourly=precipitation,precipitation_probability&daily=precipitation_sum,precipitation_probability_max&past_days=3&forecast_days=7&timezone=Asia%2FBangkok';
+var MR_URL='https://marine-api.open-meteo.com/v1/marine?latitude=13.40&longitude=100.55&hourly=sea_level_height_msl&past_days=1&forecast_days=7&timezone=Asia%2FBangkok';
+function twGraph(id,days){return TW+'waterlevel_graph?station_type=tele_waterlevel&station_id='+id+'&start_date='+bkkDate(-days)+'&end_date='+bkkDate(0);}
+function srcLink(url,label){return '<a class="src" href="'+esc(url)+'" target="_blank" rel="noopener" title="'+esc(label)+'" aria-label="'+esc(label)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg></a>';}
+var GO={mh:'water',tc:'water',no:'water',cp:'water',c13:'north',rain:'rain',tide:'rain'};
+var TABNAME={water:'ระดับน้ำคลอง/แม่น้ำ',north:'น้ำเหนือ & เขื่อน',rain:'ฝน & น้ำทะเลหนุน'};
+var LV=['ปกติ','เฝ้าระวัง','เสี่ยงสูง','วิกฤต'];
+var ORDER=[5,749,24,747,748,2676,2599,26,4,39,2744,2795];
+var ROLE={5:'คลองหลักใกล้บ้าน · ทางน้ำปี 2554',749:'ฝั่งศาลายา–พุทธมณฑล',24:'น้ำหลากจากเหนือ (ไทรน้อย)',747:'น้ำหลากจากเหนือ (บางเลน)',748:'ท่าจีน · ทางระบายฝั่งตะวันตก',2676:'ท่าจีน · ทางระบายฝั่งตะวันตก',2599:'เจ้าพระยา ช่วง กทม.',26:'เจ้าพระยา ช่วงนนทบุรี',4:'เจ้าพระยา ใกล้ปากน้ำ',39:'เจ้าพระยา อยุธยา',2744:'ท้ายเขื่อนเจ้าพระยา ชัยนาท',2795:'นครสวรรค์ ต้นน้ำเจ้าพระยา'};
+var S=null, NOTICES=[], NOTICE_AT=null, HIST=[], db=null, mcp=null, busy=false, tabId=null;
+var LIVE={thaiwater:null, meteo:null, marine:null};
+var $=function(id){return document.getElementById(id);};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+function fmt(x,d){if(d==null)d=2;return x==null||isNaN(x)?'–':Number(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms);});};
+var TZ='Asia/Bangkok';
+function thTime(ms,opt){return new Date(ms).toLocaleString('th-TH',Object.assign({timeZone:TZ},opt||{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}));}
+function localMs(s){if(typeof s==='number')return s;s=String(s).replace(' ','T');if(s.length===16)s+=':00';return Date.parse(s+'+07:00');}
+function bkkDate(off){return new Date(Date.now()+7*3600e3+(off||0)*864e5).toISOString().slice(0,10);}
+function ago(ms){if(!ms)return '–';var m=Math.round((Date.now()-ms)/60000);if(m<1)return 'เมื่อสักครู่';if(m<60)return m+' นาทีที่แล้ว';var h=Math.round(m/60);if(h<48)return h+' ชม.ที่แล้ว';return Math.round(h/24)+' วันที่แล้ว';}
+function chip(l,txt){var c=l==null?'lna':'l'+l;return '<span class="chip '+c+'"><i></i>'+esc(txt||(l==null?'ไม่มีข้อมูล':LV[l]))+'</span>';}
+
+/* ---------- transforms (raw API JSON -> compact snapshot) ---------- */
+function pickStations(load){var arr=(load&&load.waterlevel_data&&load.waterlevel_data.data)||[];var out=[];var num=function(x){return x===null||x===undefined||x===''?null:+x;};
+  arr.forEach(function(r){var s=r.station||{};if(ORDER.indexOf(+s.id)<0)return;out.push({id:+s.id,code:s.tele_station_oldcode||'',name:(s.tele_station_name&&s.tele_station_name.th)||'',river:r.river_name||'',bank:num(s.min_bank),wl:num(r.waterlevel_msl),prev:num(r.waterlevel_msl_previous),pct:num(r.storage_percent),q:num(r.discharge),sit:num(r.situation_level),t:r.waterlevel_datetime||'',agency:(r.agency&&r.agency.agency_shortname&&r.agency.agency_shortname.en)||''});});
+  if(!out.length)throw new Error('no stations');return out;}
+function hourly(graph,stepMin,key){var g=(graph&&graph.data&&graph.data.graph_data)||[];var b=new Map();
+  g.forEach(function(p){var v=p[key];if(v===null||v===undefined)return;var t=localMs(p.datetime);var k=Math.floor(t/(stepMin*6e4))*stepMin*6e4;b.set(k,+v);});
+  var keys=Array.from(b.keys()).sort(function(a,c){return a-c;});if(!keys.length)throw new Error('empty graph');
+  var v=[];for(var k=keys[0];k<=keys[keys.length-1];k+=stepMin*6e4){var x=b.get(k);v.push(x===undefined?null:Math.round(x*100)/100);}
+  return {t0:keys[0],step:stepMin,v:v,bank:graph.data.min_bank};}
+function meteo(m){var d=m.daily||{},h=m.hourly||{};if(!h.time)throw new Error('no meteo');return {daily:{t:d.time||[],p:d.precipitation_sum||[],pp:d.precipitation_probability_max||[]},hourly:{t0:h.time[0],step:60,p:h.precipitation||[],pp:h.precipitation_probability||[]}};}
+function marine(m){var h=m.hourly||{};if(!h.time)throw new Error('no marine');return {t0:h.time[0],step:60,v:(h.sea_level_height_msl||[]).map(function(x){return x==null?null:Math.round(x*100)/100;})};}
+function ser(o,key){if(!o||o.t0==null)return [];var t0=localMs(o.t0),st=(o.step||60)*6e4,arr=o[key||'v']||[];return arr.map(function(v,i){return {t:t0+i*st,v:v};});}
+function st(id){return S&&S.stations?S.stations.find(function(s){return s.id===id;}):null;}
+
+/* ---------- risk model ---------- */
+function lvlBy(x,cuts){if(x==null||isNaN(x))return null;var l=0;cuts.forEach(function(c,i){if(x>=c)l=i+1;});return l;}
+function maxOf(a){var m=null;a.forEach(function(x){if(x!=null&&!isNaN(x)&&(m==null||x>m))m=x;});return m;}
+function compute(){
+  var F=[],now=Date.now();
+  var mh=ser(S&&S.mahasawat).filter(function(p){return p.v!=null;});
+  var mhLast=mh.length?mh[mh.length-1]:null;
+  var mhMax=mhLast?maxOf(mh.filter(function(p){return p.t>=mhLast.t-24*3600e3;}).map(function(p){return p.v;})):null;
+  var s5=st(5);var mhNow=s5&&s5.wl!=null?s5.wl:(mhLast?mhLast.v:null);
+  F.push({k:'mh',label:'คลองมหาสวัสดิ์ สูงสุด 24 ชม.',val:mhMax,disp:fmt(mhMax)+' ม.',note:'ตลิ่ง +2.07 ม.รทก.',l:lvlBy(mhMax,[1.70,2.07,2.30])});
+  var tc=[st(748),st(2676)].filter(Boolean);var tcPct=maxOf(tc.map(function(s){return s.pct;}));
+  F.push({k:'tc',label:'แม่น้ำท่าจีน (นครชัยศรี)',val:tcPct,disp:fmt(tcPct,0)+'%',note:'% เทียบตลิ่ง',l:lvlBy(tcPct,[80,100,110])});
+  var no=[st(24),st(747)].filter(Boolean);var noPct=maxOf(no.map(function(s){return s.pct;}));
+  F.push({k:'no',label:'คลองทางเหนือ (ไทรน้อย/บางเลน)',val:noPct,disp:fmt(noPct,0)+'%',note:'% เทียบตลิ่ง',l:lvlBy(noPct,[80,100,110])});
+  var ss=st(2599);var ssPct=ss?ss.pct:null;
+  F.push({k:'cp',label:'เจ้าพระยา สามเสน',val:ssPct,disp:fmt(ssPct,0)+'%',note:'% เทียบตลิ่ง',l:lvlBy(ssPct,[80,100,110])});
+  var c13=st(2744);var cq=c13&&c13.q!=null?c13.q:(function(){var a=ser(S&&S.c13q).filter(function(p){return p.v!=null;});return a.length?a[a.length-1].v:null;})();
+  F.push({k:'c13',label:'ท้ายเขื่อนเจ้าพระยา (C.13)',val:cq,disp:fmt(cq,0)+' ลบ.ม./วิ',note:'',l:lvlBy(cq,[1500,2800,3500])});
+  var rh=S&&S.rain?ser(S.rain.hourly,'p'):[];var r72=null;
+  if(rh.length){var w=rh.filter(function(p){return p.t>=now-3600e3&&p.t<now+72*3600e3&&p.v!=null;});if(w.length)r72=Math.round(w.reduce(function(a,p){return a+p.v;},0)*10)/10;}
+  F.push({k:'rain',label:'ฝนพยากรณ์ 72 ชม.',val:r72,disp:fmt(r72,1)+' มม.',note:'',l:lvlBy(r72,[35,90,150])});
+  var td=S&&S.tide?ser(S.tide).filter(function(p){return p.t>=now&&p.t<now+72*3600e3&&p.v!=null;}):[];var tMax=maxOf(td.map(function(p){return p.v;}));
+  var tl=lvlBy(tMax,[1.6,1.9]);
+  F.push({k:'tide',label:'น้ำทะเลหนุนสูงสุด 72 ชม.',val:tMax,disp:fmt(tMax)+' ม.',note:'แบบจำลอง',l:tl});
+  var nl=null;if(NOTICES.length){nl=0;NOTICES.forEach(function(n){if(n.active!==false&&n.level>nl)nl=n.level;});}
+  F.push({k:'notice',label:'ประกาศทางการ (ต.ศาลากลาง)',val:nl,disp:nl==null?'–':(nl?'มีประกาศ':'ไม่มี'),note:'',l:nl});
+  var ls=F.map(function(f){return f.l;}).filter(function(x){return x!=null;});
+  var overall=null;
+  if(ls.length){var mhL=F[0].l;var n2=ls.filter(function(x){return x>=2;}).length;
+    if(ls.some(function(x){return x>=3;}))overall=3;else if(mhL===2||n2>=2)overall=2;else if(ls.some(function(x){return x>=1;}))overall=1;else overall=0;}
+  return {F:F,overall:overall,mhMax:mhMax,mhNow:mhNow,r72:r72,tMax:tMax,cq:cq,tcPct:tcPct,noPct:noPct};
+}
+
+/* ---------- mascot ---------- */
+var sealN=0;
+function sealSVG(l){
+  sealN++;var id='sc'+sealN;l=l==null?0:l;
+  var mouth=['M53 73.5 Q60 80 67 73.5','M54.5 75 Q60 76.5 65.5 75','M54.5 77 Q60 72.5 65.5 77','M53.5 78 Q60 71 66.5 78'][l];
+  var brows=l===1?'<path d="M43.5 46.5 L54 45.5 M66 45.5 L76.5 46.5" stroke="var(--seal-ink)" stroke-width="1.8" stroke-linecap="round" fill="none"/>':
+    l>=2?'<path d="M44 49.5 L53.5 45 M66.5 45 L76 49.5" stroke="var(--seal-ink)" stroke-width="1.8" stroke-linecap="round" fill="none"/>':'';
+  var extra='';
+  if(l===0)extra='<path d="M92 26 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFFFFF" opacity=".95"/><circle cx="24" cy="40" r="2.2" fill="#FFFFFF" opacity=".8"/>';
+  if(l===1)extra='<g><rect x="86" y="18" width="18" height="22" rx="9" fill="#FFFFFF"/><rect x="93.6" y="22" width="2.8" height="9" rx="1.4" fill="#123766"/><circle cx="95" cy="35" r="1.7" fill="#123766"/></g>';
+  if(l>=2){var ring=l===3?'#E53935':'#2F6FB7';
+    extra='<path d="M0 104 Q15 97 30 104 T60 104 T90 104 T120 104 V120 H0Z" fill="'+(l===3?'#1E5AA0':'#5C9BE0')+'" opacity=".85"/>'+
+      '<g transform="translate(88 92)"><circle r="11" fill="none" stroke="'+ring+'" stroke-width="6.5"/><circle r="11" fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-dasharray="5.5 11.8" transform="rotate(20)"/></g>';
+    if(l===3)extra+='<path d="M80 40 q4 6 0 9 q-4 -3 0 -9z" fill="#BFE0FF"/>';}
+  return '<defs><clipPath id="'+id+'"><circle cx="60" cy="60" r="60"/></clipPath></defs>'+
+  '<g clip-path="url(#'+id+')"><rect width="120" height="120" fill="var(--seal-bg)"/>'+
+  '<path d="M24 124 C22 80 33 33 60 33 C87 33 98 80 96 124 Z" fill="var(--seal-body)"/>'+
+  '<path d="M34 124 C34 96 43 70 60 70 C77 70 86 96 86 124 Z" fill="var(--seal-belly)" opacity=".75"/>'+
+  '<ellipse cx="46" cy="41" rx="4" ry="1.6" fill="var(--seal-belly)"/><ellipse cx="74" cy="41" rx="4" ry="1.6" fill="var(--seal-belly)"/>'+
+  '<ellipse cx="49" cy="57" rx="5.3" ry="6" fill="var(--seal-ink)"/><circle cx="50.7" cy="54.8" r="1.7" fill="#FFFFFF"/>'+
+  '<ellipse cx="71" cy="57" rx="5.3" ry="6" fill="var(--seal-ink)"/><circle cx="72.7" cy="54.8" r="1.7" fill="#FFFFFF"/>'+brows+
+  '<path d="M56.6 64.6 Q60 62.6 63.4 64.6 Q60 69 56.6 64.6Z" fill="var(--seal-ink)"/>'+
+  '<path d="M60 67.5 V71" stroke="var(--seal-ink)" stroke-width="1.4" stroke-linecap="round"/>'+
+  '<path d="'+mouth+'" stroke="var(--seal-ink)" stroke-width="1.7" fill="none" stroke-linecap="round"/>'+
+  '<g stroke="var(--seal-ink)" stroke-width=".8" opacity=".6" stroke-linecap="round"><path d="M51 69 L37 65.5 M51 70.5 L37 71 M51.5 72 L38 76"/><path d="M69 69 L83 65.5 M69 70.5 L83 71 M68.5 72 L82 76"/></g>'+
+  '<g fill="var(--seal-ink)" opacity=".45"><circle cx="53.5" cy="68.5" r=".7"/><circle cx="52" cy="70.6" r=".7"/><circle cx="66.5" cy="68.5" r=".7"/><circle cx="68" cy="70.6" r=".7"/></g>'+
+  extra+'</g>';
+}
+
+/* ---------- charts ---------- */
+var tip=$('tip');
+function niceStep(raw){var p=Math.pow(10,Math.floor(Math.log10(raw)));var n=raw/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p;}
+function yTicks(min,max,n){var s=niceStep((max-min)/(n||4)||1);var a=Math.floor(min/s)*s,out=[];for(var v=a;v<=max+1e-9;v+=s)out.push(Math.round(v*1000)/1000);return {ticks:out,min:out[0],max:Math.max(out[out.length-1],max)};}
+function dayTicks(t0,t1,fmtH){var out=[];var d=new Date(localMs(new Date(t0+7*3600e3).toISOString().slice(0,10)+'T00:00'));for(var t=d.getTime();t<=t1;t+=864e5)if(t>=t0)out.push(t);return out;}
+function showTip(host,x,y,html){tip.innerHTML=html;tip.hidden=false;var r=host.getBoundingClientRect();var px=r.left+window.scrollX+x,py=r.top+window.scrollY+y;tip.style.left=Math.max(70,Math.min(px,document.documentElement.clientWidth-70))+'px';tip.style.top=py+'px';tip.style.position='absolute';}
+function hideTip(){tip.hidden=true;}
+function lineChart(el,o){
+  if(!el)return;var W=el.clientWidth;if(!W){el.dataset.pending='1';return;}
+  var pts=(o.pts||[]).filter(function(p){return p.v!=null;});
+  if(!pts.length){el.innerHTML='<div class="empty">'+esc(o.empty||'ยังไม่มีข้อมูล')+'</div>';return;}
+  var H=o.h||220,ml=44,mr=14,mt=14,mb=28,iw=W-ml-mr,ih=H-mt-mb;
+  var t0=o.t0||o.pts[0].t,t1=o.t1||o.pts[o.pts.length-1].t;if(t1<=t0)t1=t0+3600e3;
+  var vals=pts.map(function(p){return p.v;});(o.thr||[]).forEach(function(t){if(t.inRange!==false)vals.push(t.y);});
+  var lo=o.yMin!=null?o.yMin:Math.min.apply(null,vals),hi=o.yMax!=null?o.yMax:Math.max.apply(null,vals);var pad=(hi-lo)*.08||0.5;
+  var Y=yTicks(o.yMin!=null?lo:lo-pad,hi+pad,4);
+  var x=function(t){return ml+(t-t0)/(t1-t0)*iw;},y=function(v){return mt+ih-(v-Y.min)/(Y.max-Y.min)*ih;};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" role="img" aria-label="'+esc(o.aria||'กราฟ')+'">';
+  Y.ticks.forEach(function(v){s+='<line class="grid" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text class="ax" x="'+(ml-6)+'" y="'+(y(v)+3.5)+'" text-anchor="end">'+(o.yfmt?o.yfmt(v):v)+'</text>';});
+  var DT=dayTicks(t0,t1);var every=Math.max(1,Math.ceil(DT.length*56/iw));DT.forEach(function(t,i){var xx=x(t);s+='<line class="grid" x1="'+xx+'" x2="'+xx+'" y1="'+mt+'" y2="'+(mt+ih)+'" opacity=".6"/>';if((DT.length-1-i)%every===0&&xx>ml+18&&xx<W-mr-18)s+='<text class="ax" x="'+xx+'" y="'+(H-8)+'" text-anchor="middle">'+thTime(t,{day:'numeric',month:'short'})+'</text>';});
+  var thrLab='';(o.thr||[]).forEach(function(t){if(t.y<Y.min||t.y>Y.max)return;s+='<line class="thr" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+y(t.y)+'" y2="'+y(t.y)+'" stroke="'+t.c+'"/>';thrLab+='<text class="thrl" x="'+(W-mr-4)+'" y="'+(y(t.y)-5)+'" text-anchor="end" fill="'+t.c+'">'+esc(t.label)+'</text>';});
+  if(o.now){var nx=x(Date.now());if(nx>ml&&nx<W-mr)s+='<line x1="'+nx+'" x2="'+nx+'" y1="'+mt+'" y2="'+(mt+ih)+'" stroke="var(--ink-2)" stroke-width="1"/><text class="ax" x="'+(nx+4)+'" y="'+(mt+10)+'">ตอนนี้</text>';}
+  // path with gaps
+  var d='',area='',seg=[];var flush=function(){if(seg.length>1){d+='M'+seg.map(function(p){return x(p.t).toFixed(1)+' '+y(p.v).toFixed(1);}).join('L');area+='M'+x(seg[0].t).toFixed(1)+' '+y(Y.min)+'L'+seg.map(function(p){return x(p.t).toFixed(1)+' '+y(p.v).toFixed(1);}).join('L')+'L'+x(seg[seg.length-1].t).toFixed(1)+' '+y(Y.min)+'Z';}else if(seg.length===1){d+='M'+(x(seg[0].t)-1)+' '+y(seg[0].v)+'h2';}seg=[];};
+  var gap=(o.gapMs||3*3600e3);var prev=null;
+  o.pts.forEach(function(p){if(p.v==null){return;}if(prev&&p.t-prev.t>gap)flush();seg.push(p);prev=p;});flush();
+  var col=o.color||'var(--navy)';
+  if(o.area!==false)s+='<path d="'+area+'" fill="'+col+'" opacity=".10"/>';
+  s+='<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+  var last=pts[pts.length-1];if(o.endDot!==false&&last.t<=Date.now()+600e3)s+='<circle cx="'+x(last.t)+'" cy="'+y(last.v)+'" r="4.5" fill="'+col+'" stroke="var(--surface)" stroke-width="2"/>';
+  s+=thrLab;
+  s+='<line id="xh" x1="0" x2="0" y1="'+mt+'" y2="'+(mt+ih)+'" stroke="var(--ink-2)" stroke-width="1" opacity="0"/><circle id="xd" r="4.5" fill="'+col+'" stroke="var(--surface)" stroke-width="2" opacity="0"/>';
+  s+='<rect x="'+ml+'" y="'+mt+'" width="'+iw+'" height="'+ih+'" fill="transparent" class="hit"/></svg>';
+  el.innerHTML=s;
+  var svg=el.querySelector('svg'),xh=svg.querySelector('#xh'),xd=svg.querySelector('#xd'),hit=svg.querySelector('.hit');
+  var mv=function(ev){var r=svg.getBoundingClientRect();var px=(ev.clientX-r.left)*W/r.width;var tt=t0+(px-ml)/iw*(t1-t0);var best=null;pts.forEach(function(p){if(!best||Math.abs(p.t-tt)<Math.abs(best.t-tt))best=p;});if(!best)return;
+    var bx=x(best.t),by=y(best.v);xh.setAttribute('x1',bx);xh.setAttribute('x2',bx);xh.setAttribute('opacity','.5');xd.setAttribute('cx',bx);xd.setAttribute('cy',by);xd.setAttribute('opacity','1');
+    showTip(el,bx*r.width/W,by*r.height/H,'<b>'+(o.vfmt?o.vfmt(best.v):fmt(best.v))+'</b> <span class="muted">'+esc(o.unit||'')+'</span><br><span class="muted">'+thTime(best.t)+'</span>');};
+  hit.addEventListener('pointermove',mv);hit.addEventListener('pointerleave',function(){xh.setAttribute('opacity','0');xd.setAttribute('opacity','0');hideTip();});
+}
+function barChart(el,o){
+  if(!el)return;var W=el.clientWidth;if(!W){el.dataset.pending='1';return;}
+  var bars=o.bars||[];if(!bars.length){el.innerHTML='<div class="empty">'+esc(o.empty||'ยังไม่มีข้อมูล')+'</div>';return;}
+  var H=o.h||200,ml=40,mr=12,mt=14,mb=34,iw=W-ml-mr,ih=H-mt-mb;
+  var hi=Math.max.apply(null,bars.map(function(b){return b.v||0;}).concat((o.thr||[]).map(function(t){return t.y;})).concat([o.minMax||1]));
+  var Y=yTicks(0,hi*1.08,4);var y=function(v){return mt+ih-(v-Y.min)/(Y.max-Y.min)*ih;};
+  var band=iw/bars.length,bw=Math.max(2,Math.min(24,band*.62));
+  var s='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" role="img" aria-label="'+esc(o.aria||'กราฟแท่ง')+'">';
+  Y.ticks.forEach(function(v){s+='<line class="grid" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+y(v)+'" y2="'+y(v)+'"/><text class="ax" x="'+(ml-6)+'" y="'+(y(v)+3.5)+'" text-anchor="end">'+v+'</text>';});
+  bars.forEach(function(b,i){var cx=ml+band*i+band/2;var h=Math.max(0,y(Y.min)-y(b.v||0));var top=y(b.v||0);var r=Math.min(4,h/2,bw/2);
+    if(h>0.5)s+='<path d="M'+(cx-bw/2)+' '+y(Y.min)+'V'+(top+r)+'Q'+(cx-bw/2)+' '+top+' '+(cx-bw/2+r)+' '+top+'H'+(cx+bw/2-r)+'Q'+(cx+bw/2)+' '+top+' '+(cx+bw/2)+' '+(top+r)+'V'+y(Y.min)+'Z" fill="'+(b.c||'var(--navy)')+'"/>';
+    if(b.lab&&(o.labEvery?i%o.labEvery===0:true))s+='<text class="ax" x="'+cx+'" y="'+(H-18)+'" text-anchor="middle">'+esc(b.lab)+'</text>';
+    if(b.lab2)s+='<text class="ax" x="'+cx+'" y="'+(H-5)+'" text-anchor="middle">'+esc(b.lab2)+'</text>';
+    if(o.valueLabels&&b.v!=null)s+='<text class="ax" x="'+cx+'" y="'+(top-4)+'" text-anchor="middle" style="fill:var(--ink-2)">'+fmt(b.v,1)+'</text>';
+    s+='<rect class="bh" data-i="'+i+'" x="'+(ml+band*i)+'" y="'+mt+'" width="'+band+'" height="'+ih+'" fill="transparent"/>';});
+  (o.thr||[]).forEach(function(t){if(t.y>Y.max)return;s+='<line class="thr" x1="'+ml+'" x2="'+(W-mr)+'" y1="'+y(t.y)+'" y2="'+y(t.y)+'" stroke="'+t.c+'"/><text class="thrl" x="'+(W-mr-4)+'" y="'+(y(t.y)-4)+'" text-anchor="end" fill="'+t.c+'">'+esc(t.label)+'</text>';});
+  if(o.nowIndex!=null){var nx=ml+band*o.nowIndex;s+='<line x1="'+nx+'" x2="'+nx+'" y1="'+mt+'" y2="'+(mt+ih)+'" stroke="var(--ink-2)"/><text class="ax" x="'+(nx+4)+'" y="'+(mt+10)+'">ตอนนี้</text>';}
+  s+='</svg>';el.innerHTML=s;
+  var svg=el.querySelector('svg');
+  svg.querySelectorAll('.bh').forEach(function(r){r.addEventListener('pointermove',function(){var b=bars[+r.dataset.i];var R=svg.getBoundingClientRect();var cx=(ml+band*(+r.dataset.i)+band/2)*R.width/W;showTip(el,cx,y(b.v||0)*R.height/H,b.tip);});r.addEventListener('pointerleave',hideTip);});
+}
+function spark(pts,col,thr){var P=pts.filter(function(p){return p.v!=null;});if(P.length<2)return '';var W=200,H=36;var vs=P.map(function(p){return p.v;});if(thr!=null)vs.push(thr);var lo=Math.min.apply(null,vs),hi=Math.max.apply(null,vs);if(hi===lo)hi=lo+1;
+  var t0=P[0].t,t1=P[P.length-1].t;var x=function(t){return 2+(t-t0)/(t1-t0||1)*(W-6);},y=function(v){return 3+(H-6)-(v-lo)/(hi-lo)*(H-6);};
+  var d='M'+P.map(function(p){return x(p.t).toFixed(1)+' '+y(p.v).toFixed(1);}).join('L');var L=P[P.length-1];
+  return '<svg class="spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true">'+(thr!=null?'<line x1="0" x2="'+W+'" y1="'+y(thr)+'" y2="'+y(thr)+'" stroke="var(--crit)" stroke-width="1" vector-effect="non-scaling-stroke" opacity=".7"/>':'')+'<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2" vector-effect="non-scaling-stroke"/><circle cx="'+x(L.t)+'" cy="'+y(L.v)+'" r="2.5" fill="'+col+'"/></svg>';}
+
+/* ---------- render ---------- */
+var ACTIONS=[
+  ['ติดตามแดชบอร์ดวันละครั้ง','ตรวจเบอร์ติดต่อนิติบุคคลหมู่บ้านและ ทม.ศาลากลาง ให้พร้อม'],
+  ['เปิดแดชบอร์ดเช้า–เย็น โดยเฉพาะช่วงน้ำทะเลหนุนสูง','เตรียมกระสอบทราย/แผ่นกั้นน้ำหน้าประตูและท่อระบายน้ำ','ชาร์จพาวเวอร์แบงก์ เตรียมไฟฉาย ยา และน้ำดื่ม 3 วัน','ระบุที่จอดรถสำรองบนที่สูง'],
+  ['ย้ายรถไปที่สูงหรือจุดจอดที่จังหวัดจัดไว้','ยกเอกสารสำคัญ ของมีค่า และเครื่องใช้ไฟฟ้าขึ้นชั้นบน','ติดตามประกาศของ ทม.ศาลากลาง และนิติบุคคลหมู่บ้านทุกวัน','เตรียมกระเป๋าฉุกเฉินและแผนย้ายผู้สูงอายุ/สัตว์เลี้ยง'],
+  ['ปฏิบัติตามคำสั่งของหน่วยงานท้องถิ่นทันที','ตัดไฟชั้นล่างเมื่อน้ำเริ่มเข้าบ้าน และไม่เดินลุยน้ำที่มีสายไฟ','ย้ายคนเปราะบางออกก่อน','สายด่วน ปภ. 1784 (24 ชม.)']];
+var HEAD=['ความเสี่ยงต่ำ ใช้ชีวิตตามปกติ','เฝ้าระวัง ติดตามใกล้ชิด','เสี่ยงสูง เตรียมพร้อมรับน้ำ','วิกฤต เตรียมย้ายคน รถ และของมีค่า'];
+var CTX=['ระดับน้ำรอบหมู่บ้านอยู่ในเกณฑ์ปกติ','มีสัญญาณที่ควรติดตาม แต่ระดับน้ำรอบหมู่บ้านยังต่ำกว่าตลิ่ง',
+  'น้ำในคลองหรือแม่น้ำรอบหมู่บ้านแตะหรือเกินตลิ่ง ณ จุดวัด ซึ่งไม่ได้แปลว่าน้ำเข้าหมู่บ้านแล้ว ขึ้นกับระดับถมดินและระบบสูบน้ำของโครงการ',
+  'ระดับน้ำเกินเกณฑ์วิกฤต ติดตามประกาศของเทศบาลและนิติบุคคลอย่างใกล้ชิด'];
+function render(){
+  var R=S?compute():{F:[],overall:null};var L=R.overall;
+  ['seal-big','seal-mini'].forEach(function(id){$(id).innerHTML=sealSVG(L);});
+  $('seal-big').setAttribute('aria-label','น้องแมวน้ำ อารมณ์ตามระดับ '+(L==null?'รอข้อมูล':LV[L]));
+  var vc=$('v-chip');vc.className='chip big '+(L==null?'lna':'l'+L);vc.innerHTML='<i></i>'+(L==null?'รอข้อมูล':LV[L]);
+  $('verdict').className='verdict'+(L===3?' v3':'');
+  $('v-head').textContent=L==null?'ยังไม่มีข้อมูล':HEAD[L];
+  if(L!=null){var top=R.F.filter(function(f){return f.l>=1;}).sort(function(a,b){return b.l-a.l;});
+    $('v-sum').textContent=CTX[L]+(top.length?' · จับตา: '+top.slice(0,4).map(function(f){return f.label+' '+f.disp;}).join(', '):'');}
+  document.querySelectorAll('#v-scale span').forEach(function(sp,i){sp.classList.toggle('on',i===L);});
+  // actions
+  var ac=$('act-chip');ac.className='chip '+(L==null?'lna':'l'+L);ac.innerHTML='<i></i>'+(L==null?'–':LV[L]);
+  if(L!=null){var list=ACTIONS[L].concat(L>0?ACTIONS[L-1]:[]).slice(0,6);$('actions').innerHTML=list.map(function(a){return '<li>'+esc(a)+'</li>';}).join('');}
+  // factors
+  $('factors').querySelector('tbody').innerHTML=R.F.map(function(f){var g=GO[f.k];return '<tr'+(g?' class="go" data-go="'+g+'" tabindex="0" role="link" title="ไปที่แท็บ '+esc(TABNAME[g])+'"':'')+'><td>'+esc(f.label)+(g?'&nbsp;<span class="go-ar">›</span>':'')+(f.note?'<div class="small muted">'+esc(f.note)+'</div>':'')+'</td><td class="r num">'+esc(f.disp)+'</td><td>'+chip(f.l)+'</td></tr>';}).join('')||'<tr><td colspan="3" class="empty">รอข้อมูล</td></tr>';
+  renderKpis(R);renderNotices();renderFresh();renderStations();renderNorth(R);renderRainK(R);
+  var SRC={mh:[twGraph(5,3),'ข้อมูลต้นทาง: กราฟคลองมหาสวัสดิ์ (ThaiWater)'],st:[TW_LOAD,'ข้อมูลต้นทาง: ระดับน้ำทุกสถานี (ThaiWater)'],c13:[twGraph(2744,10),'ข้อมูลต้นทาง: C.13 (ThaiWater/กรมชลประทาน)'],om:[OM_URL,'ข้อมูลต้นทาง: Open-Meteo Forecast'],mr:[MR_URL,'ข้อมูลต้นทาง: Open-Meteo Marine'],dg:[TW_LOAD,'ข้อมูลต้นทาง: ระดับน้ำ (ThaiWater)']};
+  document.querySelectorAll('.src-slot').forEach(function(el){var s=SRC[el.dataset.src];if(s)el.innerHTML=srcLink(s[0],s[1]);});
+  renderCharts();
+}
+function kpi(o){var go=o.go?' go" data-go="'+o.go+'" role="link" tabindex="0" title="ไปที่แท็บ '+esc(TABNAME[o.go]||'')+'':'';
+  return '<div class="card kpi '+(o.l!=null?'k'+o.l:'')+go+'"><div class="row"><span class="lab">'+esc(o.lab)+(o.src?srcLink(o.src,'ข้อมูลต้นทาง: '+o.lab):'')+'</span>'+(o.noChip?'':chip(o.l))+'</div><div class="val">'+o.val+'<small>'+esc(o.unit||'')+'</small></div><div class="sub">'+o.sub+'</div>'+(o.spark||'')+(o.go?'<div class="more">ดูรายละเอียดในแท็บ '+esc(TABNAME[o.go])+' ›</div>':'')+'</div>';}
+function renderKpis(R){
+  if(!S){$('kpis').innerHTML='<div class="card empty">กำลังโหลดข้อมูล… ถ้าค้างนาน ลองรีเฟรชหน้าอีกครั้ง</div>';return;}
+  var F={};R.F.forEach(function(f){F[f.k]=f;});var s5=st(5),c13=st(2744),tc=st(748);
+  var mh=ser(S.mahasawat);var cq=ser(S.c13q);var c24=null;if(cq.length>4){var a=cq.filter(function(p){return p.v!=null;});if(a.length>4)c24=a[a.length-1].v-a[a.length-5].v;}
+  var rd=S.rain&&S.rain.daily||{t:[],p:[],pp:[]};var ti=rd.t.indexOf(bkkDate(1));
+  var td=S.tide?ser(S.tide).filter(function(p){return p.t>=Date.now()&&p.t<Date.now()+72*3600e3&&p.v!=null;}):[];var tp=null;td.forEach(function(p){if(!tp||p.v>tp.v)tp=p;});
+  $('kpis').innerHTML=[
+    kpi({go:'water',lab:'คลองมหาสวัสดิ์ (ล่าสุด)',l:F.mh.l,val:fmt(R.mhNow),unit:'ม.รทก.',sub:'สูงสุด 24 ชม. <b class="num">'+fmt(R.mhMax)+'</b> · ตลิ่ง 2.07 · '+(s5?esc(s5.t.slice(5)):''),spark:spark(mh,'var(--navy)',2.07)}),
+    kpi({go:'water',lab:'แม่น้ำท่าจีน นครชัยศรี',l:F.tc.l,val:fmt(R.tcPct,0),unit:'% ตลิ่ง',sub:tc?'สะพานนครชัยศรี '+fmt(tc.wl)+' / ตลิ่ง '+fmt(tc.bank)+' ม.':'–'}),
+    kpi({go:'north',lab:'ท้ายเขื่อนเจ้าพระยา C.13',l:F.c13.l,val:fmt(R.cq,0),unit:'ลบ.ม./วิ',sub:(c24!=null?(c24>=0?'เพิ่มขึ้น ':'ลดลง ')+fmt(Math.abs(c24),0)+' ใน 24 ชม.':'–')+' · เป้าคุม ≤3,000',spark:spark(cq,'var(--navy)')}),
+    kpi({go:'rain',lab:'ฝนพยากรณ์ 72 ชม. ที่หมู่บ้าน',l:F.rain.l,val:fmt(R.r72,1),unit:'มม.',sub:ti>=0?'พรุ่งนี้ '+fmt(rd.p[ti],1)+' มม. · โอกาส '+fmt(rd.pp[ti],0)+'%':'–'}),
+    kpi({go:'rain',lab:'น้ำทะเลหนุนสูงสุด 72 ชม.',l:F.tide.l,val:fmt(R.tMax),unit:'ม. (แบบจำลอง)',sub:tp?'ช่วง '+thTime(tp.t,{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'–'}),
+    kpi({go:'water',lab:'คลองทางเหนือ ไทรน้อย/บางเลน',l:F.no.l,val:fmt(R.noPct,0),unit:'% ตลิ่ง',sub:'เส้นทางน้ำหลากเข้าบางใหญ่–มหาสวัสดิ์'})
+  ].join('');
+}
+function renderNotices(){
+  var el=$('notices');if(!NOTICES.length){el.innerHTML='<div class="empty">ยังไม่มีประกาศที่บันทึกไว้</div>';return;}
+  el.innerHTML=NOTICES.map(function(n){return '<div class="notice"><div>'+chip(n.level,n.level>=1?LV[n.level]:'ข้อมูล')+'</div><div><div>'+esc(n.title)+'</div><div class="small muted">'+esc(n.date||'')+(n.src?' · '+(n.url?'<a href="'+esc(n.url)+'" target="_blank" rel="noopener">'+esc(n.src)+'</a>':esc(n.src)):'')+'</div></div></div>';}).join('')+(NOTICE_AT?'<div class="small muted" style="margin-top:6px">บันทึกประกาศล่าสุด '+thTime(localMs(NOTICE_AT))+'</div>':'');
+}
+function srcAt(k){var v=S&&S.src&&S.src[k];return v?Date.parse(v.at||v):null;}
+function renderFresh(){
+  var dataT=null;if(S&&S.stations)S.stations.forEach(function(s){if(s.t){var t=localMs(s.t);if(!dataT||t>dataT)dataT=t;}});
+  var rows=[['thaiwater','ระดับน้ำ ThaiWater / กรมชลประทาน',dataT?'วัดล่าสุด '+thTime(dataT):''],['meteo','ฝน Open-Meteo','พยากรณ์ 7 วัน'],['marine','น้ำทะเลหนุน Open-Meteo Marine','พยากรณ์ 7 วัน']];
+  var h='';rows.forEach(function(r){var at=srcAt(r[0]);var st=LIVE[r[0]];var cls=st==='err'?'err':st==='ok'?'ok':'stale';var lab=st==='err'?'ดึงสดไม่สำเร็จ ใช้ชุดที่บันทึกไว้':st==='ok'?'สด':'ชุดที่บันทึกไว้';
+    h+='<span class="dot '+cls+'"></span><div>'+esc(r[1])+'<div class="small muted">'+esc(r[2])+'</div></div><div class="small r" style="text-align:right">'+(at?'ดึงเมื่อ '+thTime(at)+'<br><span class="muted">'+ago(at)+' · '+lab+'</span>':'<span class="muted">ยังไม่เคยดึง</span>')+'</div>';});
+  h+='<span class="dot '+(NOTICES.length?'stale':'stale')+'"></span><div>ประกาศทางการ<div class="small muted">คัดจากข่าวและประกาศทางการ</div></div><div class="small" style="text-align:right">'+(NOTICE_AT?thTime(localMs(NOTICE_AT)):'–')+'</div>';
+  $('fresh').innerHTML=h;
+  var f=S&&S.fetchedAt?Date.parse(S.fetchedAt):null;
+  $('fresh-note').textContent=f?'ชุดข้อมูลล่าสุด '+thTime(f)+' ('+ago(f)+')':'';
+}
+function renderStations(){
+  if(!S||!S.stations){return;}
+  var rows=ORDER.map(st).filter(Boolean).map(function(s){var p=s.pct;var l=lvlBy(p,[80,100,110]);var w=Math.max(0,Math.min(100,(p||0)/1.25));var col=l===3?'var(--crit)':l===2?'var(--navy)':l===1?'var(--blue)':'var(--sky)';
+    var d=s.wl!=null&&s.prev!=null?s.wl-s.prev:null;var tr=d==null?'–':(Math.abs(d)<0.005?'คงที่':(d>0?'▲ ':'▼ ')+fmt(Math.abs(d)));
+    return '<tr><td><b>'+esc(s.name)+'</b>'+srcLink(twGraph(s.id,3),'ข้อมูลต้นทาง ThaiWater: '+s.name)+'<div class="small muted">'+esc(s.code)+' · '+esc(s.agency)+'</div></td><td class="small ink2">'+esc(ROLE[s.id]||'')+'</td><td class="r num"><b>'+fmt(s.wl)+'</b>'+(s.q!=null?'<div class="small muted">'+fmt(s.q,0)+' ลบ.ม./วิ</div>':'')+'</td><td class="r num muted">'+fmt(s.bank)+'</td><td><div style="display:flex;align-items:center;gap:8px"><div class="meter" title="'+fmt(p,0)+'% ของตลิ่ง"><b style="width:'+w+'%;background:'+col+'"></b><span class="bank" style="left:80%"></span></div><span class="num small">'+fmt(p,0)+'%</span></div></td><td class="r num small">'+tr+'</td><td class="small muted num">'+esc(s.t.slice(5))+'</td></tr>';});
+  $('stations').querySelector('tbody').innerHTML=rows.join('');
+  var s5=st(5);$('mh-time').textContent=s5?'วัดล่าสุด '+thTime(localMs(s5.t)):'';
+}
+function renderNorth(R){
+  if(!S)return;var c2=st(2795),c13=st(2744),ay=st(39);
+  $('north-kpis').innerHTML=[
+    kpi({src:twGraph(2795,10),lab:'นครสวรรค์ C.2 (อัตราการไหล)',l:c2?lvlBy(c2.q,[1500,2800,3500]):null,val:fmt(c2&&c2.q,0),unit:'ลบ.ม./วิ',sub:c2?'วัด '+esc(c2.t.slice(5)):'–'}),
+    kpi({src:twGraph(2744,10),lab:'ท้ายเขื่อนเจ้าพระยา C.13',l:lvlBy(R.cq,[1500,2800,3500]),val:fmt(R.cq,0),unit:'ลบ.ม./วิ',sub:c13?'ระดับน้ำ '+fmt(c13.wl)+' / ตลิ่ง '+fmt(c13.bank)+' ม.':'–'}),
+    kpi({src:twGraph(39,3),lab:'เจ้าพระยา อยุธยา',l:ay?lvlBy(ay.pct,[80,100,110]):null,val:fmt(ay&&ay.pct,0),unit:'% ตลิ่ง',sub:ay?fmt(ay.wl)+' / ตลิ่ง '+fmt(ay.bank)+' ม.':'–'})].join('');
+  $('c13-time').textContent=c13?'วัดล่าสุด '+thTime(localMs(c13.t)):'';
+}
+function renderRainK(R){
+  if(!S||!S.rain)return;var rd=S.rain.daily;var t0=rd.t.indexOf(bkkDate(0));var mx=null;rd.t.forEach(function(d,i){if(d>=bkkDate(0)&&(mx==null||rd.p[i]>rd.p[mx]))mx=i;});
+  var past=0;rd.t.forEach(function(d,i){if(d<bkkDate(0))past+=rd.p[i]||0;});
+  $('rain-kpis').innerHTML=[
+    kpi({src:OM_URL,lab:'ฝนวันนี้ (พยากรณ์)',l:lvlBy(t0>=0?rd.p[t0]:null,[35,90,150]),val:fmt(t0>=0?rd.p[t0]:null,1),unit:'มม.',sub:'โอกาสฝน '+fmt(t0>=0?rd.pp[t0]:null,0)+'%'}),
+    kpi({src:OM_URL,lab:'ฝน 72 ชม. ข้างหน้า',l:lvlBy(R.r72,[35,90,150]),val:fmt(R.r72,1),unit:'มม.',sub:mx!=null?'วันที่ฝนมากสุด '+thTime(localMs(rd.t[mx]+'T12:00'),{weekday:'short',day:'numeric',month:'short'})+' · '+fmt(rd.p[mx],1)+' มม.':''}),
+    kpi({src:OM_URL,lab:'ฝนสะสม 3 วันที่ผ่านมา',l:null,noChip:true,val:fmt(past,1),unit:'มม.',sub:'จากแบบจำลอง Open-Meteo'})].join('');
+  var a=srcAt('meteo');$('rain-time').textContent=a?'ดึงเมื่อ '+thTime(a):'';var b=srcAt('marine');$('tide-time').textContent=b?'ดึงเมื่อ '+thTime(b):'';
+}
+function renderDiagram(R){
+  var el=$('levels-diagram');if(!el)return;var W=el.clientWidth;if(!W)return;
+  var sd=st(749),ss=st(2599);R=R||compute();
+  var items=[{y:2.07,c:'var(--crit)',lab:'ตลิ่งคลองมหาสวัสดิ์ +2.07'},{y:2.31,c:'var(--muted)',lab:'ตลิ่งศาลาดิน +2.31'}];
+  if(R.mhMax!=null)items.push({y:R.mhMax,c:'var(--navy)',lab:'มหาสวัสดิ์ สูงสุด 24 ชม. '+fmt(R.mhMax),bold:true});
+  if(R.mhNow!=null)items.push({y:R.mhNow,c:'var(--blue)',lab:'มหาสวัสดิ์ ล่าสุด '+fmt(R.mhNow)});
+  if(sd&&sd.wl!=null)items.push({y:sd.wl,c:'var(--sky)',lab:'ศาลาดิน ล่าสุด '+fmt(sd.wl)});
+  if(ss&&ss.wl!=null)items.push({y:ss.wl,c:'var(--blue)',lab:'เจ้าพระยา สามเสน '+fmt(ss.wl)});
+  var narrow=W<520,fs=narrow?11:12,gap=fs+8;
+  var H=340,ml=40,mt=16,mb=16,ih=H-mt-mb,lo=0,hi=3;var y=function(v){return mt+ih-(v-lo)/(hi-lo)*ih;};
+  var lineEnd=ml+Math.min(220,Math.max(90,W*0.34)),lx=lineEnd+18;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" height="'+H+'" role="img" aria-label="แผนภาพเทียบระดับพื้นดินกับระดับน้ำ">';
+  for(var v=0;v<=3;v+=0.5)s+='<line x1="'+ml+'" x2="'+(W-4)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--line)"/><text x="'+(ml-6)+'" y="'+(y(v)+4)+'" text-anchor="end" style="fill:var(--muted);font:11px var(--f-data)">+'+v.toFixed(1)+'</text>';
+  s+='<rect x="'+(ml+4)+'" y="'+y(2.0)+'" width="'+(lineEnd-ml-4)+'" height="'+(y(1.0)-y(2.0))+'" fill="var(--mist)" stroke="var(--sky)" rx="3"/>';
+  items.sort(function(a,b){return b.y-a.y;});
+  var pos=items.map(function(it){return y(it.y);});
+  for(var i=1;i<pos.length;i++)if(pos[i]<pos[i-1]+gap)pos[i]=pos[i-1]+gap;
+  var over=pos.length?pos[pos.length-1]-(H-mb):0;if(over>0)for(var k=pos.length-1;k>=0;k--){pos[k]-=over;if(k>0&&pos[k-1]>pos[k]-gap)pos[k-1]=pos[k]-gap;else break;}
+  items.forEach(function(it,i){var yy=y(it.y),ly=pos[i];
+    s+='<line x1="'+(ml+4)+'" x2="'+lineEnd+'" y1="'+yy+'" y2="'+yy+'" stroke="'+it.c+'" stroke-width="'+(it.bold?2.5:1.6)+'"/>'+
+      '<path d="M'+lineEnd+' '+yy+' L'+(lx-4)+' '+ly+'" stroke="var(--muted)" stroke-width="1" fill="none" opacity=".6"/>'+
+      '<text x="'+lx+'" y="'+(ly+fs*0.36)+'" style="fill:var(--ink);font:'+(it.bold?'600 ':'')+fs+'px var(--f-body)">'+esc(it.lab)+'</text>';});
+  s+='</svg><div class="legend"><span><i class="box" style="background:var(--mist);border:1px solid var(--sky)"></i>พื้นดินเดิม (ประเมิน +1.0 ถึง +2.0 ม.รทก.)</span></div>';el.innerHTML=s;
+}
+function renderCharts(){
+  var vis=document.querySelector('.panel:not([hidden])');if(!vis)return;var id=vis.id;
+  if(id==='p-water'&&S){lineChart($('ch-mh'),{pts:ser(S.mahasawat),h:240,unit:'ม.รทก.',aria:'ระดับน้ำคลองมหาสวัสดิ์ 72 ชั่วโมง',thr:[{y:2.07,label:'ตลิ่ง 2.07',c:'var(--crit)'},{y:1.70,label:'เฝ้าระวัง 1.70',c:'var(--blue)'}],yfmt:function(v){return v.toFixed(1);},gapMs:4*3600e3});}
+  if(id==='p-north'&&S){lineChart($('ch-c13'),{pts:ser(S.c13q),h:240,unit:'ลบ.ม./วิ',aria:'อัตราการไหลท้ายเขื่อนเจ้าพระยา',thr:[{y:2800,label:'2,800',c:'var(--blue)'},{y:3500,label:'3,500',c:'var(--crit)'}],yMin:0,vfmt:function(v){return fmt(v,0);},yfmt:function(v){return v.toLocaleString('en-US');},gapMs:13*3600e3});}
+  if(id==='p-rain'&&S&&S.rain){var rd=S.rain.daily,today=bkkDate(0);
+    barChart($('ch-rain-d'),{h:220,aria:'ฝนรายวัน',bars:rd.t.map(function(d,i){var ms=localMs(d+'T12:00');return {v:rd.p[i],c:d<today?'var(--sky)':'var(--navy)',lab:thTime(ms,{weekday:'short'}),lab2:thTime(ms,{day:'numeric'}),tip:'<b>'+fmt(rd.p[i],1)+'</b> มม.<br><span class="muted">'+thTime(ms,{weekday:'long',day:'numeric',month:'short'})+(d<today?' · ที่ผ่านมา':' · โอกาส '+fmt(rd.pp[i],0)+'%')+'</span>'};}),thr:[{y:35,label:'ฝนหนัก 35',c:'var(--blue)'}],minMax:10,valueLabels:true});
+    var hs=ser(S.rain.hourly,'p'),hp=ser(S.rain.hourly,'pp');var now=Date.now();var bars=[];var startI=-1;
+    hs.forEach(function(p,i){if(p.t>=now-3600e3&&p.t<now+47*3600e3){if(startI<0)startI=i;var h=new Date(p.t+7*3600e3).getUTCHours();bars.push({v:p.v,c:'var(--navy)',lab:h%6===0?String(h).padStart(2,'0'):'',lab2:h===0?thTime(p.t,{day:'numeric',month:'short'}):'',tip:'<b>'+fmt(p.v,1)+'</b> มม.<br><span class="muted">'+thTime(p.t)+' · โอกาส '+fmt(hp[i]&&hp[i].v,0)+'%</span>'});}});
+    barChart($('ch-rain-h'),{h:200,aria:'ฝนรายชั่วโมง',bars:bars,minMax:2});
+    var td=ser(S.tide);lineChart($('ch-tide'),{pts:td,h:220,unit:'ม.',aria:'น้ำทะเลหนุน',now:true,endDot:false,yfmt:function(v){return v.toFixed(1);},thr:[{y:1.6,label:'หนุนสูง 1.6',c:'var(--blue)'}]});
+    var peaks=[];for(var i=1;i<td.length-1;i++){var p=td[i];if(p.v!=null&&p.t>=now&&p.t<now+96*3600e3&&p.v>=td[i-1].v&&p.v>td[i+1].v&&p.v>1.2)peaks.push(p);}
+    $('tide-peaks').innerHTML=peaks.length?'น้ำขึ้นสูงช่วงถัดไป: '+peaks.slice(0,6).map(function(p){return '<b class="num">'+fmt(p.v)+'</b> ม. '+thTime(p.t,{weekday:'short',hour:'2-digit',minute:'2-digit'});}).join(' · '):'';}
+  if(id==='p-site'){renderDiagram();var pts=HIST.filter(function(h){return h.mhMax!=null;}).map(function(h){return {t:localMs(h.date+'T12:00'),v:h.mhMax};});
+    if(pts.length<2){$('ch-hist').innerHTML='<div class="empty">มีบันทึก '+pts.length+' วัน · กราฟจะแสดงเมื่อมีตั้งแต่ 2 วันขึ้นไป</div>';}
+    else lineChart($('ch-hist'),{pts:pts,h:200,unit:'ม.รทก.',aria:'ระดับสูงสุดรายวันคลองมหาสวัสดิ์',thr:[{y:2.07,label:'ตลิ่ง 2.07',c:'var(--crit)'}],gapMs:3*864e5,yfmt:function(v){return v.toFixed(2);}});}
+}
+
+/* ---------- tabs ---------- */
+var TABS=['glance','water','north','rain','site','src'];
+function selectTab(name,focus){if(TABS.indexOf(name)<0)name='glance';TABS.forEach(function(t){var on=t===name;$('t-'+t).setAttribute('aria-selected',on?'true':'false');$('t-'+t).tabIndex=on?0:-1;$('p-'+t).hidden=!on;});
+  if(focus)$('t-'+name).focus();try{history.replaceState(null,'','#'+name);}catch(e){}try{localStorage.setItem('fw-tab',name);}catch(e){}hideTip();renderCharts();}
+TABS.forEach(function(t,i){var b=$('t-'+t);b.addEventListener('click',function(){selectTab(t);});b.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();selectTab(TABS[(i+(e.key==='ArrowRight'?1:TABS.length-1))%TABS.length],true);}});});
+var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(renderCharts,150);});
+function goFrom(e){var g=e.target.closest('[data-go]');if(!g||e.target.closest('a'))return false;selectTab(g.dataset.go);try{window.scrollTo({top:0,behavior:'smooth'});}catch(x){window.scrollTo(0,0);}return true;}
+document.addEventListener('click',goFrom);
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-go]')&&!e.target.closest('a')){e.preventDefault();goFrom(e);}});
+$('copy-1784').addEventListener('click',function(){var b=this;try{navigator.clipboard.writeText('1784').then(function(){b.textContent='คัดลอกแล้ว';},function(){b.textContent='1784';});}catch(e){b.textContent='1784';}});
+
+/* ---------- sync status ---------- */
+function setSync(msg){$('sync-text').innerHTML=msg;}
+function baseSync(extra){var f=S&&S.fetchedAt?Date.parse(S.fetchedAt):null;setSync((f?'ข้อมูลชุดล่าสุด <b>'+thTime(f)+'</b> · '+ago(f):'ยังไม่มีข้อมูลที่บันทึกไว้')+(extra?'<br><span class="muted">'+extra+'</span>':''));}
+function setBusy(b){busy=b;}
+
+/* ---------- public data loader (data.json + live Open-Meteo) ---------- */
+function setSync(msg){$('sync-text').innerHTML=msg;}
+function baseSync(extra){var f=S&&S.fetchedAt?Date.parse(S.fetchedAt):null;setSync((f?'ระดับน้ำชุดล่าสุด <b>'+thTime(f)+'</b> · '+ago(f):'ยังไม่มีข้อมูล')+(extra?'<br><span class="muted">'+extra+'</span>':''));}
+var STALE_H=3;
+async function loadData(){
+  try{var r=await fetch('data.json?t='+Math.floor(Date.now()/60000),{cache:'no-store'});if(!r.ok)throw new Error(r.status);var d=await r.json();
+    S=d.snap||null;var n=d.notices||{};NOTICES=(n.items||[]).slice();NOTICE_AT=n.updatedAt||null;HIST=(d.history||[]).slice().sort(function(a,b){return a.date<b.date?-1:1;});return true;}
+  catch(e){return false;}
+}
+async function liveMeteo(){
+  if(!S)S={v:1,src:{}};S.src=S.src||{};var now=new Date().toISOString();
+  try{var m=await (await fetch(OM_URL)).json();S.rain=meteo(m);S.src.meteo={at:now};LIVE.meteo='ok';}catch(e){LIVE.meteo='err';}
+  try{var t=await (await fetch(MR_URL)).json();S.tide=marine(t);S.src.marine={at:now};LIVE.marine='ok';}catch(e){LIVE.marine='err';}
+}
+function syncNote(){var f=S&&S.fetchedAt?Date.parse(S.fetchedAt):null;if(!f)return 'โหลดข้อมูลระดับน้ำไม่สำเร็จ ลองรีเฟรชอีกครั้ง';
+  return (Date.now()-f>STALE_H*3600e3?'⚠︎ ข้อมูลระดับน้ำเก่ากว่า '+STALE_H+' ชม. ระบบอัปเดตอาจหยุดชั่วคราว · ดูค่าสดที่ thaiwater.net':'อัปเดตอัตโนมัติทุก 1 ชั่วโมง · ฝนและน้ำทะเลหนุนดึงสดเมื่อเปิดหน้า');}
+
+/* ---------- boot ---------- */
+(async function boot(){
+  var h=(location.hash||'').slice(1);var saved=null;try{saved=localStorage.getItem('fw-tab');}catch(e){}
+  selectTab(TABS.indexOf(h)>=0?h:(saved||'glance'));render();
+  var ok=await loadData();render();baseSync(ok?'กำลังดึงพยากรณ์ฝนล่าสุด…':'โหลดข้อมูลระดับน้ำไม่สำเร็จ');
+  await liveMeteo();render();baseSync(syncNote());
+})();
+setInterval(function(){baseSync(syncNote());},60000);
+setInterval(async function(){if(document.hidden)return;var ok=await loadData();if(ok){await liveMeteo();render();baseSync(syncNote());}},15*60000);
+})();
+
+</script>
+
+</body></html>
